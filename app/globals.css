@@ -64,7 +64,9 @@ body {
 
 
 :root {
-  --primary-day: #03045E;
+  --primary-day: #55371b;
+  --primary-active: #523011;
+  --primary-nav: #FFF2E6;
   --secondary-day: #0077B6;
   --background-day: #FAFAFA;
   --content-day: #303030;
@@ -75,4 +77,5 @@ body {
   --icon-day: #4a4e5a;
   --outline-day: #e7e7e7;
   --text-button: #ffffff;
+  --hover-btn: #754920;
 }

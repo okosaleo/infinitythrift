@@ -8,6 +8,22 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+	colors: {
+		'primary-day': 'var(--primary-day)',
+		'primary-active': 'var(--primary-active)',
+		'primary-nav': 'var(--primary-nav)',
+	  'secondary-day': 'var(--secondary-day)',
+	  'background-day': 'var(--background-day)',
+	  'content-day': 'var(--content-day)',
+	  'content2-day': 'var(--content2-day)',
+	  'default-day': 'var(--default-day)',
+	  'positive-day': 'var(--positive-day)',
+	  'destructive-day': 'var(--destructive-day)',
+	  'icon-day': 'var(--icon-day)',
+	  'outline-day': 'var(--outline-day)',
+	  'text-button': 'var(--text-button)',
+	   'hover-btn': 'var(--hover-btn)'
+	},
   	extend: {
   		colors: {
   			background: 'hsl(var(--background))',
