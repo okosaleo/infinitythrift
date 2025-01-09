@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useState } from "react";
-import { signUpSchema } from "@/lib/zodSchemas";
+import { signInSchema } from "@/lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/auth-client";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -14,45 +14,42 @@ import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 
 export default function SignUp() {
     const [pending, setPending] = useState(false)
     const { toast } = useToast();
+    const router = useRouter();
 
-    const form = useForm<z.infer<typeof signUpSchema>>({
-		resolver: zodResolver(signUpSchema),
+    const form = useForm<z.infer<typeof signInSchema>>({
+		resolver: zodResolver(signInSchema),
 		defaultValues: {
-			name: "",
 			email: "",
 			password: "",
-			confirmPassword: "",
 		},
 	});
 
-    const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
-		await authClient.signUp.email(
+    const onSubmit = async (values: z.infer<typeof signInSchema>) => {
+		await authClient.signIn.email(
 			{
 				email: values.email,
-				password: values.password,
-				name: values.name,
+				password: values.password, 
 			},
 			{
 				onRequest: () => {
 					setPending(true);
 				},
 				onSuccess: () => {
-					toast({
-						title: "Account created",
-						description:
-							"Your account has been created. Check your email for a verification link.",
-					});
+					router.push("/dashboard");
+                    router.refresh();
 				},
 				onError: (ctx) => {
 					console.log("error", ctx);
 					toast({
 						title: "Something went wrong",
-						description: ctx.error.message ?? "Something went wrong.",
+						description: ctx.error.message ?? "Sign up or check your inputs",
+                        variant: "destructive"
 					});
 				},
 			}
@@ -62,19 +59,19 @@ export default function SignUp() {
 
   return (
     <div className="bg-[url('/img/infi.png')] lg:bg-[length:70vw_100vh] bg-[length:100vw_100vh] bg-center w-full flex items-center justify-center h-screen relative">
-        <Card className=" mx-auto max-w-md max-h-[92vh] w-full h-fit flex flex-col items-center justify-center p-2 bg-text-button absolute ">
+        <Card className=" mx-auto max-w-md max-h-[92vh] w-full h-fit flex flex-col  items-center justify-center p-3 bg-text-button absolute ">
         <CardHeader className="flex flex-col items-center mb-[-20] mt-[-25]">
-            <Image src="/img/infilogo.png" alt="logo" width={112} height={45} className="object-cover mb-[-23]" />
-            <CardTitle className="text-content-day text-xl font-semibold ">Sign Up</CardTitle>
+            <Image src="/img/infilogo.png" alt="logo" width={112} height={45} />
+            <CardTitle className="text-content-day text-xl font-semibold mb-[-23]">Sign In</CardTitle>
         </CardHeader>
             <CardContent className="text-content-day w-full">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} >
-                {["name", "email", "password", "confirmPassword", "Referral Code"].map((field) => (
+                {[ "email", "password"].map((field) => (
 								<FormField
 									control={form.control}
 									key={field}
-									name={field as keyof z.infer<typeof signUpSchema>}
+									name={field as keyof z.infer<typeof signInSchema>}
 									render={({ field: fieldProps }) => (
 										<FormItem>
 											<FormLabel>
@@ -82,16 +79,11 @@ export default function SignUp() {
 											</FormLabel>
 											<FormControl>
 												<Input
-													type={
-														field.includes("password")
-															? "password"
-															: field === "email"
-															? "email"
-															: "name"
-													}
+													type={field === "password" ? "password" : "email"}
 													placeholder={`Enter your ${field}`}
 													{...fieldProps}
-													autoComplete="off"
+													autoComplete={
+														field === "password" ? "current-password" : "email" }
 												/>
 											</FormControl>
 											<FormMessage />
@@ -100,9 +92,9 @@ export default function SignUp() {
 								/>
 							))}
                             <div className="flex mt-2 flex-col ">
-                                
-                                <div className="flex items-center md:justify-center justify-start text-[13px] md:mt-4 mt-2 text-primary-day">
-                                <Link href="/sign-in">Already have an acccount? Sign in.</Link>
+                            <div className="flex md:flex-row flex-col justify-between gap-2">
+                                <div className="flex flex-row items-center gap-2 text-sm"><Checkbox /> <p>Remember Me</p></div>
+                                <Link href="/" className="text-[12px] text-primary-day ">Forgot Password?</Link>
                                 </div>
                                 
                             </div>
@@ -112,7 +104,7 @@ export default function SignUp() {
           Please Wait
         </Button>
       ) : (
-        <Button type="submit" className="text-text-button mt-4 bg-primary-day w-full hover:bg-hover-btn">Sign Up</Button>
+        <Button type="submit" className="text-text-button mt-4 bg-primary-day w-full hover:bg-hover-btn">Sign In</Button>
       )}
                     </form>
                     </Form>
@@ -122,4 +114,3 @@ export default function SignUp() {
     </div>
   )
 }
-

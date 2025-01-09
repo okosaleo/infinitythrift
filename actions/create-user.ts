@@ -1,7 +1,7 @@
 "use server"
+import { auth } from "@/auth";
 import { signUpSchema } from "@/lib/zodSchemas"
 import {parseWithZod} from "@conform-to/zod"
-import { redirect } from "next/navigation";
 
 
 export async function CreateUser(prevState: unknown, formData: FormData) {
@@ -13,5 +13,11 @@ export async function CreateUser(prevState: unknown, formData: FormData) {
         return submission.reply();
     }
 
-    return redirect("/email-verified")
+    const validatedFields = signUpSchema.safeParse({
+        email: formData.get("email"),
+        lastName: formData.get("lastName"),
+        firstName: formData.get("firstName"),
+        password: formData.get("password"),
+    })
+
 }

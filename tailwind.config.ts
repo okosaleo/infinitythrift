@@ -22,7 +22,8 @@ export default {
 	  'icon-day': 'var(--icon-day)',
 	  'outline-day': 'var(--outline-day)',
 	  'text-button': 'var(--text-button)',
-	   'hover-btn': 'var(--hover-btn)'
+	   'hover-btn': 'var(--hover-btn)',
+	   'active-nav': 'var(--active-nav)',
 	},
   	extend: {
   		colors: {

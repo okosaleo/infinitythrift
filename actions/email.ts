@@ -1,52 +1,38 @@
-"use server";
-import formData from "form-data";
-import Mailgun from "mailgun.js";
+import { MailtrapClient } from "mailtrap";
 
-export async function sendEmail({
-  to,
-  subject,
-  text,
+const TOKEN = process.env.MAILTRAP_API_TOKEN as string; // Your Mailtrap API token
+const SENDER_EMAIL = process.env.MAILTRAP_SENDER_EMAIL as string; // Verified sender email
+
+const client = new MailtrapClient({
+  token: TOKEN,
+  testInboxId: 3377093,
+});
+
+export const sendVerificationEmail = async ({
+  recipientEmail,
+  verificationUrl,
 }: {
-  to: string;
-  subject: string;
-  text: string;
-}) {
-  if (!process.env.MAILGUN_API_KEY) {
-    throw new Error("MAILGUN_API_KEY environment variable is not set");
-  }
-  if (!process.env.MAILGUN_DOMAIN) {
-    throw new Error("MAILGUN_DOMAIN environment variable is not set");
-  }
-  if (!process.env.EMAIL_FROM) {
-    throw new Error("EMAIL_FROM environment variable is not set");
-  }
-
-  const mailgun = new Mailgun(formData);
-  const mg = mailgun.client({
-    username: "api",
-    key: process.env.MAILGUN_API_KEY,
-  });
-
-  const message = {
-    from: process.env.EMAIL_FROM,
-    to: to.toLowerCase().trim(),
-    subject: subject.trim(),
-    text: text.trim(),
-  };
-
+  recipientEmail: string;
+  verificationUrl: string;
+}) => {
   try {
-    const response = await mg.messages.create(process.env.MAILGUN_DOMAIN, message);
-
-    return {
-      success: true,
-      messageId: response.id,
+    const sender = {
+      email: "hello@example.com",
+      name: "Mailtrap Test",
     };
+    
+    const response = await client.testing.send({
+      from: sender,
+      to: [{ email: recipientEmail }],
+      subject: "Verify Your Email Address",
+      text: `Please verify your email by clicking the following link: ${verificationUrl}`,
+      html: `<p>Please verify your email by clicking the following link:</p><a href="${verificationUrl}">${verificationUrl}</a>`,
+    });
 
+    console.log("Email sent successfully:", response);
   } catch (error) {
     console.error("Error sending email:", error);
-    return {
-      success: false,
-      message: "Failed to send email. Please try again later.",
-    };
+    throw new Error("Failed to send verification email.");
   }
-}
+};
+
