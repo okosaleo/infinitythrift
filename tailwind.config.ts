@@ -8,6 +8,22 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+	screens: {
+		'sm': '640px',
+		// => @media (min-width: 640px) { ... }
+  
+		'md': '768px',
+		// => @media (min-width: 768px) { ... }
+  
+		'lg': '1025px',
+		// => @media (min-width: 1024px) { ... }
+  
+		'xl': '1280px',
+		// => @media (min-width: 1280px) { ... }
+  
+		'2xl': '1536px',
+		// => @media (min-width: 1536px) { ... }
+	  },
 	colors: {
 		'primary-day': 'var(--primary-day)',
 		'primary-active': 'var(--primary-active)',
@@ -24,6 +40,7 @@ export default {
 	  'text-button': 'var(--text-button)',
 	   'hover-btn': 'var(--hover-btn)',
 	   'active-nav': 'var(--active-nav)',
+	   'light-overlay': 'var(--light-overlay)',
 	},
   	extend: {
   		colors: {

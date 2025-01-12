@@ -1,5 +1,5 @@
 "use client";
-import {  Banknote, HandCoins,  LayoutDashboard, PiggyBank, } from "lucide-react"
+import {  BadgeHelp, Banknote, ChevronDown, HandCoins,  LayoutDashboard, Settings } from "lucide-react"
 
 import {
   Sidebar,
@@ -16,6 +16,7 @@ import Link from "next/link"
 import { Collapsible, CollapsibleTrigger } from "./ui/collapsible"
 import { CollapsibleContent } from "@radix-ui/react-collapsible"
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 // Menu items.
 const items = [
@@ -35,10 +36,16 @@ const items = [
 
 export function AppSidebar() {
   const [isvisible, setIsVisible] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const [isClick, setIsClicked] = useState(false)
 
 const handleClick = () => {
   setIsVisible(true)
 }
+
+const toggleMenu = () => {
+  setIsClicked(!isClick);
+};
 
   return (
     <Sidebar className="border-outline-day" >
@@ -47,26 +54,32 @@ const handleClick = () => {
             <Image src="/img/infilogo.png" alt="Logo" className="object-cover" fill />
             </div>
         </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="flex flex-col justify-between mb-16 ">
         <SidebarGroup>
             <SidebarGroupContent>
                 <SidebarMenu className="flex gap-2">
                         <SidebarMenuItem>
-                            <SidebarMenuButton asChild>
+                            <SidebarMenuButton asChild  >
                                 <Link href="/dashboard" className="flex items-center gap-4">
                                 <LayoutDashboard  className="size-4 text-content2-day"/>
                                 <span className="text-base font-medium text-content2-day">Dashboard</span>
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
-                        <Collapsible defaultOpen className="group/collapsible">
+                        <Collapsible open={isOpen}
+      onOpenChange={setIsOpen} className="group/collapsible">
                         <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
-                            <SidebarMenuButton asChild>
-                                <Link href="/dashboard" className="flex items-center gap-4">
+                            <SidebarMenuButton asChild className="w-full">
+                                <button onClick={toggleMenu} className="flex  items-center flex-row gap-4 justify-between w-full">
+                                <div className="flex items-center gap-4">
                                 <HandCoins  className="size-4 text-content2-day"/>
                                 <span className="text-base font-medium text-content2-day">Savings</span>
-                                </Link>
+                                </div>
+                                <ChevronDown className={cn(`transition-transform duration-300 ${
+            isClick ? "-rotate-90" : ""
+          }`)} />
+                                </button>
                             </SidebarMenuButton>
                             </CollapsibleTrigger>
                             <CollapsibleContent>
@@ -93,8 +106,36 @@ const handleClick = () => {
                             </CollapsibleContent>
                         </SidebarMenuItem>
                         </Collapsible>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton asChild>
+                                <Link href="/dashboard" className="flex items-center gap-4">
+                                <Banknote  className="size-4 text-content2-day"/>
+                                <span className="text-base font-medium text-content2-day">Loans</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+                                <Link href="/dashboard" className="flex items-center gap-4">
+                                <BadgeHelp className="size-4 text-content2-day"/>
+                                <span className="text-base font-medium text-content2-day">Support</span>
+                                </Link>
+                            </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+                                <Link href="/dashboard" className="flex items-center gap-4">
+                                <Settings className="size-4 text-content2-day"/>
+                                <span className="text-base font-medium text-content2-day">Settings</span>
+                                </Link>
+                            </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>

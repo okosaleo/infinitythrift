@@ -1,4 +1,5 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+"use client"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,13 +12,27 @@ import {
 
 import SignoutButton from "./sign-out";
 import { Copy, LockKeyhole } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface iAppProps {
-  refid: string;
+  refid: string | undefined;
   name: string;
 }
 
 export function UserNav({ refid, name }: iAppProps) {
+    const { toast } = useToast();
+    const handleCopy = () => {
+      if (refid) {
+        navigator.clipboard.writeText(refid).then(() => {
+          toast({
+            title: "Referral link copied",
+            description: "You have just copied your referral link."
+          })
+        }).catch(err => {
+          console.error("Failed to copy text: ", err);
+        });
+      }
+    };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -43,13 +58,13 @@ export function UserNav({ refid, name }: iAppProps) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <div className="flex-row flex gap-2 items-start ">
-            <div className="cursor-pointer"><Copy className="size-5 text-content-day" /></div>
+          <button className="flex-row flex gap-2 items-start cursor-pointer w-full" onClick={handleCopy}>
+            <div className="cursor-pointer"><Copy   className="size-5 text-content-day" /></div>
             <div className="flex flex-col gap-1 text-content-day">
               <p className="leading-none text-[12px]">Referral Code</p>
               <p className="leading-none font-medium">{refid}</p>
             </div>
-          </div>
+          </button>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
