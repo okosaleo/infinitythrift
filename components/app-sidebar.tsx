@@ -84,7 +84,7 @@ const toggleMenu = () => {
                             </CollapsibleTrigger>
                             <CollapsibleContent>
                             <SidebarMenuButton asChild className="w-full flex justify-between items-center">
-                                <Link href="/dashboard" className="flex items-center gap-4">
+                                <Link href="/dashboard/savings/thrift" className="flex items-center gap-4">
                                 <span className="text-base font-medium text-content2-day">Thrift Savings</span>
                                 </Link>
                             </SidebarMenuButton>
@@ -129,7 +129,7 @@ const toggleMenu = () => {
             </SidebarMenuItem>
             <SidebarMenuItem>
             <SidebarMenuButton asChild>
-                                <Link href="/dashboard" className="flex items-center gap-4">
+                                <Link href="/dashboard/settings" className="flex items-center gap-4">
                                 <Settings className="size-4 text-content2-day"/>
                                 <span className="text-base font-medium text-content2-day">Settings</span>
                                 </Link>

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Inter_Tight } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-const inter = Inter_Tight({
+const inter = Inter({
   subsets: ['latin']
 })
 

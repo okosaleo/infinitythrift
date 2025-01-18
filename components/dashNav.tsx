@@ -28,7 +28,6 @@ export default async function Navbar() {
 
   if(!session) {
     throw new Error("Unauthorized")
-    router
   }
 
   const data = await getData(session?.user.id);

@@ -110,7 +110,7 @@ export default function DashBoardPage() {
             <button className="p-2 bg-light-overlay rounded-2xl">View Details</button>
           </div>
           <div className="flex flex-col gap-1">
-            <div className="flex flex-row gap-7 items-start">
+            <div className="flex lg:flex-row flex-col lg:gap-7 gap-2 lg:bg-text-button bg-active-nav items-start lg:p-0 p-2 rounded-md">
               <p className="text-xl font-bold text-content-day"> &#8358;450,000.00</p>
               <p className="text-content-day">Outstanding Balance: <span className="font-semibold">123,000.00</span></p>
               <p className="text-content-day">Duration: <span className="font-semibold">3 Months</span></p>
