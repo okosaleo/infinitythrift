@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { AlignJustify } from "lucide-react";
+import { AlignJustify, X } from "lucide-react";
 
 const menuLinks = [
   { path: "/", label: "Home" },
@@ -12,8 +12,6 @@ const menuLinks = [
   { path: "/", label: "Services" },
   { path: "/", label: "Contact" },
   { path: "/", label: "FAQ" },
-  { path: "/sign-in", label: "Login" },
-  { path: "/sign-up", label: "Register" },
 ];
 
 export default function MainNav() {
@@ -54,9 +52,9 @@ export default function MainNav() {
 
   return (
     <div ref={container} className="relative overflow-hidden">
-      <div className="menu-overlay fixed top-0 left-0 w-screen h-screen p-8 bg-text-button z-50 flex [clip-path:polygon(0%_0%,_100%_0%,_100%_0%,_0%_0%)] text-primary-day ">
+      <div className="menu-overlay fixed top-0 left-0 w-screen h-screen p-8 bg-text-button z-50 flex [clip-path:polygon(0%_0%,_100%_0%,_100%_0%,_0%_0%)]  justify-center text-primary-day ">
         {/* menu-overlay-bar */}
-        <div className="menu-overlay-bar fixed top-0 left-0 w-screen p-8 flex justify-between items-center z-50 font-nohemiS">
+        <div className="menu-overlay-bar fixed top-[-40px] left-0 w-screen p-5 flex justify-between items-center z-50 ">
           <div className="menu-logo ">
             <Link href="/">   <Image
             src="/img/infilogo.png"
@@ -67,28 +65,24 @@ export default function MainNav() {
           /></Link>
           </div>
           <div className="menu-close cursor-pointer">
-            <p onClick={toggleMenu}>Close</p>
+           <X onClick={toggleMenu} className="size-4 text-content-day" />
           </div>
         </div>
 
         {/* menu overlay items */}
-        <div
-          className="menu-close-icon flex-2 flex flex-end justify-between cursor-pointer"
-          onClick={toggleMenu}
-        ></div>
-        <div className="menu-copy flex-[4] flex flex-col justify-between pt-8 mt-16">
-          <div className="menu-links mt-16">
+        <div className="menu-copy flex flex-col  items-center justify-between pt-2 mt-4 w-full">
+          <div className="menu-links mt-16 ">
             {menuLinks.map((link, index) => (
               <div
                 key={index}
-                className="menu-link-item w-max [clip-path:polygon(0_0,_100%_0,_100%_110%,_0%_110%)]"
+                className="menu-link-item items-center  justify-center w-full [clip-path:polygon(0_0,_100%_0,_100%_110%,_0%_110%)] flex p-2"
               >
                 <div
-                  className="menu-link-item-holder relative "
+                  className="menu-link-item-holder relative"
                   onClick={toggleMenu}
                 >
                   <Link
-                    className="menu-link  text-black text-5xl  "
+                    className="menu-link  text-black text-2xl  text-center"
                     href={link.path}
                   >
                     {link.label}
@@ -96,6 +90,36 @@ export default function MainNav() {
                 </div>
               </div>
             ))}
+            <div
+                className="menu-link-item items-center  justify-center w-full [clip-path:polygon(0_0,_100%_0,_100%_110%,_0%_110%)] flex p-2"
+              >
+                <div
+                  className="menu-link-item-holder relative"
+                  onClick={toggleMenu}
+                >
+                  <Link
+                    className="menu-link  text-black text-2xl  text-center border-[1px] border-content-day px-28 py-1 rounded-md "
+                    href="/sign-in"
+                  >
+                    Log in
+                  </Link>
+                </div>
+              </div>
+              <div
+                className="menu-link-item items-center  justify-center w-full [clip-path:polygon(0_0,_100%_0,_100%_110%,_0%_110%)] flex p-2"
+              >
+                <div
+                  className="menu-link-item-holder relative"
+                  onClick={toggleMenu}
+                >
+                  <Link
+                    className="menu-link  text-text-button text-2xl  text-center bg-primary-day px-[6.4rem] py-1 rounded-md "
+                    href="/sign-in"
+                  >
+                    Register
+                  </Link>
+                </div>
+              </div>
           </div>
         </div>
       </div>
