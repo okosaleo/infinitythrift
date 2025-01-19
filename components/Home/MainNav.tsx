@@ -7,11 +7,13 @@ import { useGSAP } from "@gsap/react";
 import { AlignJustify } from "lucide-react";
 
 const menuLinks = [
-  { path: "/", label: "About" },
+  { path: "/", label: "Home" },
+  { path: "/about", label: "About" },
   { path: "/", label: "Services" },
   { path: "/", label: "Contact" },
-  { path: "/sign-in", label: "Login" },
   { path: "/", label: "FAQ" },
+  { path: "/sign-in", label: "Login" },
+  { path: "/sign-up", label: "Register" },
 ];
 
 export default function MainNav() {
@@ -79,14 +81,14 @@ export default function MainNav() {
             {menuLinks.map((link, index) => (
               <div
                 key={index}
-                className="menu-link-item w-max [clip-path:polygon(0_0,_100%_0,_100%_100%,_0%_100%)]"
+                className="menu-link-item w-max [clip-path:polygon(0_0,_100%_0,_100%_110%,_0%_110%)]"
               >
                 <div
                   className="menu-link-item-holder relative "
                   onClick={toggleMenu}
                 >
                   <Link
-                    className="menu-link  text-black text-5xl tracking-[-0.02em] leading-[85%]"
+                    className="menu-link  text-black text-5xl  "
                     href={link.path}
                   >
                     {link.label}
@@ -108,13 +110,13 @@ export default function MainNav() {
           />
         </div>
         <div
-          className="md:max-lg:hidden md:max-xl:hidden md:max-2xl:hidden px-4"
+          className="md:hidden flex px-4"
           onClick={toggleMenu}
         >
           <AlignJustify className="text-[black] size-4 " />
         </div>
         <div className="text-base  justify-between w-2/6 md:flex hidden flex-row gap-1 text-content-day items-center">
-          <Link href="/">About</Link>
+          <Link href="/about">About</Link>
           <Link href="/">Services</Link>
           <Link href="/">Contact</Link>
           <Link href="/">FAQ</Link>
