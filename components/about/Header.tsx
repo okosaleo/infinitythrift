@@ -6,7 +6,7 @@ export default function Header() {
     <div className="flex flex-col w-full">
         <div className="flex flex-col px-12 w-full">-
         <div className="flex items-center justify-center text-3xl text-content-day">
-            <h1>About</h1>
+            <h1 className="font-semibold">About</h1>
         </div>
         <div className="flex md:flex-row flex-col items-center justify-center gap-4 py-6">
             <div >
