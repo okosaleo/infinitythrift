@@ -86,7 +86,7 @@ export default function MainNav() {
                   onClick={toggleMenu}
                 >
                   <Link
-                    className="menu-link  text-black text-7xl tracking-[-0.02em] leading-[85%]"
+                    className="menu-link  text-black text-5xl tracking-[-0.02em] leading-[85%]"
                     href={link.path}
                   >
                     {link.label}
