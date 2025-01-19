@@ -8,9 +8,9 @@ import { Button } from '../ui/button'
 export default function ContactUs() {
   return (
     <div className='relative mt-24'>
-        <div className="bg-[url('/img/mij.jpeg')] lg:bg-[length:100vw_100vh] bg-[length:100vw_80vh]  bg-center w-full md:h-[83vh] h-[80vh] relative">
-        <div className="absolute z-10 bg-[#55371bd2] w-full md:h-[83vh] h-[80vh] py-9">
-            <div className='flex flex-col gap-2'>
+        <div className="bg-[url('/img/mij.jpeg')] lg:bg-[length:100vw_100vh] bg-[length:100vw_80vh]  bg-center w-full md:h-[80vh] md:max-lg:h-[60vh] h-[75vh]  relative">
+        <div className="absolute z-10 bg-[#55371bd2] md:max-lg:h-[60vh] w-full md:h-[80vh] h-[75vh] py-9">
+            <div className='flex flex-col gap-2 justify-between'>
                 <div className='flex-col flex justify-center items-center gap-2'>
                     <div className='text-text-button text-2xl font-semibold'>
                         <p>Contact Us</p>
@@ -19,10 +19,10 @@ export default function ContactUs() {
                         <p>Got Questions? We&apos;ve Got Answers</p>
                     </div>
                 </div>
-                <div className='flex lg:flex-row flex-col justify-center gap-4 w-full lg:px-32 px-9 py-5 '>
-                    <div className='lg:w-1/2 w-full flex flex-col md:gap-10 gap-2'>
+                <div className='flex lg:flex-row md:max-lg:gap-3 flex-col justify-center gap-4 w-full lg:px-32 px-9 py-5 '>
+                    <div className='lg:w-1/2 w-full lg:flex flex-col hidden md:gap-10 gap-2'>
                     <div className='flex md:mt-10 mt-1'>
-                        <div className='md:w-14 md:h-14 h-9 w-9 bg-[#fdca28] rounded-full flex items-center justify-center mr-3'>
+                        <div className='lg:w-14 lg:h-14 h-9 w-9 bg-[#fdca28] rounded-full flex items-center justify-center mr-3'>
                             <MapPin className='size-4'/>
                         </div>
                         <div className='flex flex-col md:gap-2 gap-0'>
@@ -31,7 +31,7 @@ export default function ContactUs() {
                         </div>
                     </div>
                     <div className='flex'>
-                        <div className='md:w-14 md:h-14 h-9 w-9 bg-[#fdca28] rounded-full flex items-center justify-center mr-3'>
+                        <div className='lg:w-14 lg:h-14 h-9 w-9 bg-[#fdca28] rounded-full flex items-center justify-center mr-3'>
                             <Phone className='size-4' />
                         </div>
                         <div className='flex flex-col gap-2'>
@@ -40,7 +40,7 @@ export default function ContactUs() {
                         </div>
                     </div>
                     <div className='flex'>
-                        <div className='md:w-14 md:h-14 h-9 w-9 bg-[#fdca28] rounded-full flex items-center justify-center mr-3'>
+                        <div className='lg:w-14 lg:h-14 h-9 w-9 bg-[#fdca28] rounded-full flex items-center justify-center mr-3'>
                             <Mail className='size-4' />
                         </div>
                         <div className='flex flex-col gap-2'>

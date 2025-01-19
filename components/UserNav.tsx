@@ -16,7 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 
 interface iAppProps {
   refid: string | undefined;
-  name: string;
+  name: string | undefined;
 }
 
 export function UserNav({ refid, name }: iAppProps) {
@@ -38,7 +38,7 @@ export function UserNav({ refid, name }: iAppProps) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full ">
           <Avatar className="h-10 w-10 bg-outline-day hover:bg-active-nav">
-            <AvatarFallback className="bg-outline-day font-bold uppercase hover:bg-active-nav">{name.slice(0, 2)}</AvatarFallback>
+            <AvatarFallback className="bg-outline-day font-bold uppercase hover:bg-active-nav">{name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -46,7 +46,7 @@ export function UserNav({ refid, name }: iAppProps) {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-row items-start gap-2">
           <Avatar className="h-10 w-10 bg-outline-day hover:bg-active-nav">
-            <AvatarFallback className="bg-outline-day font-bold uppercase hover:bg-active-nav">{name.slice(0, 2)}</AvatarFallback>
+            <AvatarFallback className="bg-outline-day font-bold uppercase hover:bg-active-nav">{name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col gap-1 items-start">
           <p className="text-xs leading-none text-content-day font-medium mt-2">
