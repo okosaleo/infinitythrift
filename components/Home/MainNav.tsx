@@ -8,10 +8,10 @@ import { AlignJustify } from "lucide-react";
 
 const menuLinks = [
   { path: "/", label: "About" },
-  { path: "/work", label: "Services" },
-  { path: "/about", label: "Contact" },
-  { path: "/contact", label: "Login" },
-  { path: "/lab", label: "FAQ" },
+  { path: "/", label: "Services" },
+  { path: "/", label: "Contact" },
+  { path: "/sign-in", label: "Login" },
+  { path: "/", label: "FAQ" },
 ];
 
 export default function MainNav() {
