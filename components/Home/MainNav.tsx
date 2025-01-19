@@ -114,7 +114,7 @@ export default function MainNav() {
                 >
                   <Link
                     className="menu-link  text-text-button text-2xl  text-center bg-primary-day px-[6.4rem] py-1 rounded-md "
-                    href="/sign-in"
+                    href="/sign-up"
                   >
                     Register
                   </Link>
