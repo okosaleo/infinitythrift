@@ -1,7 +1,6 @@
-import { DatePickerDemo } from "@/components/DateSelect";
+
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ArchiveRestore, Calendar, Download, EllipsisVertical, EllipsisVerticalIcon, ListFilter, Plus, Search } from "lucide-react";
+import { ArchiveRestore, Download,  EllipsisVerticalIcon, ListFilter, Plus, Search } from "lucide-react";
 
 
 export default function ThriftPage() {
@@ -71,7 +70,6 @@ export default function ThriftPage() {
             </div>
             </div>
             <div className="flex justify-start items-start w-1/5 mt-10">
-                <DatePickerDemo />
             </div>
          </div>
          {/* Transsactions */}

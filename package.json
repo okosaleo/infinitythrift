@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "npm install --legacy-peer-deps && next build ",
+    "dev": "npm install --legacy-peer-deps && next dev --turbopack",
+    "build": "npm install --legacy-peer-deps && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -42,7 +42,6 @@
     "node-mailjet": "^6.0.6",
     "nodemailer": "^6.9.16",
     "react": "^19.0.0",
-    "react-day-picker": "^8.10.1",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
     "swiper": "^11.2.1",
@@ -61,5 +60,11 @@
     "prisma": "^6.1.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "overrides": {
+    "date-fns": "^3.6.0"
+  },
+  "resolutions": {
+    "date-fns": "^3.6.0"
   }
 }
