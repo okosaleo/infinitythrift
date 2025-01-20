@@ -9,7 +9,7 @@ import { AlignJustify, X } from "lucide-react";
 const menuLinks = [
   { path: "/", label: "Home" },
   { path: "/about", label: "About" },
-  { path: "/", label: "Services" },
+  { path: "/services", label: "Services" },
   { path: "/", label: "Contact" },
   { path: "/", label: "FAQ" },
 ];
@@ -124,7 +124,7 @@ export default function MainNav() {
         </div>
       </div>
       <nav className="flex items-center justify-between h-12">
-        <div className="md:px-10 px-3 ">
+        <Link href="/" className="md:px-10 px-3 ">
           <Image
             src="/img/infilogo.png"
             alt="Logo"
@@ -132,7 +132,7 @@ export default function MainNav() {
             height={45}
             className="object-cover"
           />
-        </div>
+        </Link>
         <div
           className="md:hidden flex px-4"
           onClick={toggleMenu}
@@ -141,7 +141,7 @@ export default function MainNav() {
         </div>
         <div className="text-base  justify-between w-2/6 md:flex hidden flex-row gap-1 text-content-day items-center">
           <Link href="/about">About</Link>
-          <Link href="/">Services</Link>
+          <Link href="/services">Services</Link>
           <Link href="/">Contact</Link>
           <Link href="/">FAQ</Link>
           <Link href="/">Blog</Link>
