@@ -10,7 +10,7 @@ const menuLinks = [
   { path: "/", label: "Home" },
   { path: "/about", label: "About" },
   { path: "/services", label: "Services" },
-  { path: "/", label: "Contact" },
+  { path: "/contact", label: "Contact" },
   { path: "/", label: "FAQ" },
 ];
 
@@ -142,7 +142,7 @@ export default function MainNav() {
         <div className="text-base  justify-between w-2/6 md:flex hidden flex-row gap-1 text-content-day items-center">
           <Link href="/about">About</Link>
           <Link href="/services">Services</Link>
-          <Link href="/">Contact</Link>
+          <Link href="/contact">Contact</Link>
           <Link href="/">FAQ</Link>
           <Link href="/">Blog</Link>
         </div>

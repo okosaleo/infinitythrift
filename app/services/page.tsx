@@ -41,7 +41,7 @@ const you = [
 
 export default function Services() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 w-full">
         <MainNav />
         <div className="flex justify-center items-center">
             <h1 className="font-medium text-content-day text-3xl">Services</h1>
