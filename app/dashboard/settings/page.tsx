@@ -13,7 +13,7 @@ const linknavs = [
         id: 2,
         title: "KYC",
         desc: "Check verification",
-        url: "/dashboard/settings/account",
+        url: "/dashboard/settings/kyc",
         icon: FileCheck,
     },
     {
@@ -27,7 +27,7 @@ const linknavs = [
         id: 4,
         title: "Account",
         desc: "Deactivate, Delete",
-        url: "/dashboard/settings/kyc",
+        url: "/dashboard/settings/account",
         icon: CircleUserRound,
     },
 ]
