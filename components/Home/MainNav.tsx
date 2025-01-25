@@ -51,7 +51,7 @@ export default function MainNav() {
   }, [isMenuOpen]);
 
   return (
-    <div ref={container} className="relative overflow-hidden">
+    <div ref={container} className="relative overflow-hidden bg-text-button">
       <div className="menu-overlay fixed top-0 left-0 w-screen h-screen p-8 bg-text-button z-50 flex [clip-path:polygon(0%_0%,_100%_0%,_100%_0%,_0%_0%)]  justify-center text-primary-day ">
         {/* menu-overlay-bar */}
         <div className="menu-overlay-bar fixed top-[-40px] left-0 w-screen p-5 flex justify-between items-center z-50 ">
@@ -143,7 +143,7 @@ export default function MainNav() {
           <Link href="/about">About</Link>
           <Link href="/services">Services</Link>
           <Link href="/contact">Contact</Link>
-          <Link href="/">FAQ</Link>
+          <Link href="/faq">FAQ</Link>
           <Link href="/">Blog</Link>
         </div>
         <div className="md:flex hidden justify-center flex-row gap-2 items-center px-10">

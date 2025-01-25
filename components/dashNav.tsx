@@ -4,36 +4,27 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { headers } from "next/headers";
 
-const userCache = new Map<string, { id: string; name: string }>();
 
-async function getCachedUserData(userId: string) {
-  if (userCache.has(userId)) {
-    return userCache.get(userId);
-  }
+async function getData(userId: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { id: true, name: true },
   });
 
-  if (user) {
-    // Store in cache for future use
-    userCache.set(userId, user);
-  }
-
   return user;
 }
 
 export default async function Navbar() {
-
+  
   const session = await auth.api.getSession({
     headers: await headers()
   })
-
+  
   if(!session) {
     throw new Error("Unauthorized")
   }
 
-  const data = await getCachedUserData(session?.user.id);
+  const data = await getData(session?.user.id);
   return (
     <nav className=" flex justify-between items-center">
         <div className=" relative flex justify-between gap-10 pr-10 items-center flex-row">
