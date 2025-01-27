@@ -41,8 +41,8 @@ export default function SignUp() {
 					setPending(true);
 				},
 				onSuccess: () => {
+					setPending(false);
 					router.push("/dashboard");
-                    router.refresh();
 				},
 				onError: (ctx) => {
 					console.log("error", ctx);
