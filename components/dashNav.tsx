@@ -3,6 +3,7 @@ import { UserNav } from "./UserNav";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 
 async function getData(userId: string) {
@@ -21,7 +22,8 @@ export default async function Navbar() {
   })
   
   if(!session) {
-    throw new Error("Unauthorized")
+    redirect("/sign-in");
+    return null;
   }
 
   const data = await getData(session?.user.id);
