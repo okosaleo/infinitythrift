@@ -94,7 +94,7 @@ export default function SignUp() {
                             <div className="flex mt-2 flex-col ">
                             <div className="flex md:flex-row flex-col justify-between gap-2">
                                 <div className="flex flex-row items-center gap-2 text-sm"><Checkbox /> <p>Remember Me</p></div>
-                                <Link href="/" className="text-[12px] text-primary-day ">Forgot Password?</Link>
+                                <Link href="/forgot-password" className="text-[12px] text-primary-day ">Forgot Password?</Link>
                                 </div>
                                 
                             </div>

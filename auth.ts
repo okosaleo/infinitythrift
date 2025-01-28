@@ -20,6 +20,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+    
   },
   emailVerification: {
     sendOnSignUp: true,
@@ -29,6 +30,7 @@ export const auth = betterAuth({
       await sendVerificationEmail({
         recipientEmail: user.email,
         verificationUrl,
+        
       });
     },
   },
