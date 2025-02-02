@@ -10,10 +10,10 @@ export const auth = betterAuth({
   }),
   session: {
     expiresIn: 60 * 60 * 24 * 7,
-    updateAge: 60 * 60 * 24,
+    updateAge: 60 * 60 * 12,
     cookieCache: {
       enabled: true,
-      maxAge: 60 * 60 // Cache duration in seconds
+      maxAge: 60 * 60 *24 // Cache duration in seconds
   }
   },
   plugins: [openAPI()],

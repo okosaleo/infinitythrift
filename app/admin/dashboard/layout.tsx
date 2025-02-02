@@ -1,5 +1,5 @@
+import Navbar from "@/components/adminnav/dashNav";
 import { AdminSidebar } from "@/components/adminsidebar";
-import Navbar from "@/components/dashNav";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 

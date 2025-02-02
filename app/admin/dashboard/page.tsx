@@ -96,7 +96,7 @@ export default function page() {
             </div>
 
             {/* Activities*/}
-            <div className="flex flex-col ml-3 w-full bg-text-button mt-4 rounded-md">
+            <div className="flex flex-col ml-3 w-full bg-text-button mt-10 rounded-md">
         <div className="flex flex-col w-full">
           <div className="flex justify-between w-full p-5">
             <h2 className="text-xl text-content-day font-bold">Activities</h2>

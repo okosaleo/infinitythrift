@@ -1,5 +1,5 @@
 "use client";
-import {  BadgeHelp, Banknote, ChevronDown, HandCoins,  LayoutDashboard, Newspaper, Settings, UsersRound, UsersRoundIcon } from "lucide-react"
+import { Banknote, ChevronDown, HandCoins,  Info,  LayoutDashboard, Newspaper, Settings, UsersRoundIcon } from "lucide-react"
 
 import {
   Sidebar,
@@ -37,7 +37,12 @@ const items = [
 export function AdminSidebar() {
   const [isvisible, setIsVisible] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const [isCpen, setIsCpen] = useState(false)
+  const [isClosed, setIsClosed] = useState(false)
   const [isClick, setIsClicked] = useState(false)
+  const [isClick1, setIsClicked1] = useState(false)
+  const [isClick2, setIsClicked2] = useState(false)
+
 
 const handleClick = () => {
   setIsVisible(true)
@@ -45,6 +50,13 @@ const handleClick = () => {
 
 const toggleMenu = () => {
   setIsClicked(!isClick);
+};
+
+const toggleMen = () => {
+  setIsClicked1(!isClick1);
+};
+const toggleMe = () => {
+  setIsClicked2(!isClick2);
 };
 
   return (
@@ -68,7 +80,7 @@ const toggleMenu = () => {
                         </SidebarMenuItem>
                         <SidebarMenuItem>
                             <SidebarMenuButton asChild  >
-                                <Link href="/admin/dashboard" className="flex items-center gap-4">
+                                <Link href="/admin/dashboard/members" className="flex items-center gap-4">
                                 <UsersRoundIcon  className="size-4 text-content2-day"/>
                                 <span className="text-base font-medium text-content2-day">Members</span>
                                 </Link>
@@ -92,105 +104,81 @@ const toggleMenu = () => {
                             </CollapsibleTrigger>
                             <CollapsibleContent>
                             <SidebarMenuButton asChild className="w-full flex justify-between items-center">
-                                <Link href="/dashboard/savings/thrift" className="flex items-center gap-4">
+                                <Link href="/admin/dashboard/savings/thrift" className="flex items-center gap-4">
                                 <span className="text-base font-medium text-content2-day">Thrift Savings</span>
                                 </Link>
                             </SidebarMenuButton>
                             </CollapsibleContent>
-                            <CollapsibleContent>
+                            <CollapsibleContent className="border-b-[1px] border-outline-day">
                             <SidebarMenuButton asChild>
-                                <Link href="/dashboard/savings/categories" className="flex items-center gap-4">
+                                <Link href="/admin/dashboard/savings/categories" className="flex items-center gap-4">
                                 <span className="text-base font-medium text-content2-day">Categories / Cycles</span>
                                 </Link>
                             </SidebarMenuButton>
                             </CollapsibleContent>
-                            <CollapsibleContent>
-                            <SidebarMenuButton asChild>
-                                <Link href="/dashboard" className="flex items-center gap-4">
-                                <span className="text-base font-medium text-content2-day">Structured Savings</span>
-                                </Link>
-                            </SidebarMenuButton>
-                            <hr className="w-full text-outline-day" />
-                            </CollapsibleContent>
                         </SidebarMenuItem>
                         </Collapsible>
-                        <Collapsible open={isOpen}
-      onOpenChange={setIsOpen} className="group/collapsible">
+                        <Collapsible open={isClosed}
+      onOpenChange={setIsClosed} className="group/collapsible">
                         <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
                             <SidebarMenuButton asChild className="w-full">
-                                <button onClick={toggleMenu} className="flex  items-center flex-row gap-4 justify-between w-full">
+                                <button onClick={toggleMen} className="flex  items-center flex-row gap-4 justify-between w-full">
                                 <div className="flex items-center gap-4">
                                 <Banknote  className="size-4 text-content2-day"/>
                                 <span className="text-base font-medium text-content2-day">Loans</span>
                                 </div>
                                 <ChevronDown className={cn(`transition-transform duration-300 ${
-            isClick ? "-rotate-90" : ""
+            isClick1 ? "-rotate-90" : ""
           }`)} />
                                 </button>
                             </SidebarMenuButton>
                             </CollapsibleTrigger>
                             <CollapsibleContent>
                             <SidebarMenuButton asChild className="w-full flex justify-between items-center">
-                                <Link href="/dashboard/savings/thrift" className="flex items-center gap-4">
-                                <span className="text-base font-medium text-content2-day">Thrift Savings</span>
+                                <Link href="/admin/dashboard/loans/loan-ledger" className="flex items-center gap-4">
+                                <span className="text-base font-medium text-content2-day">Loan Ledger</span>
                                 </Link>
                             </SidebarMenuButton>
                             </CollapsibleContent>
-                            <CollapsibleContent>
+                            <CollapsibleContent className="border-b-[1px] border-outline-day">
                             <SidebarMenuButton asChild>
-                                <Link href="/dashboard/savings/categories" className="flex items-center gap-4">
-                                <span className="text-base font-medium text-content2-day">Categories / Cycles</span>
+                                <Link href="/admin/dashboard/loans/loan-request" className="flex items-center gap-4">
+                                <span className="text-base font-medium text-content2-day">Loan Requests</span>
                                 </Link>
                             </SidebarMenuButton>
-                            </CollapsibleContent>
-                            <CollapsibleContent>
-                            <SidebarMenuButton asChild>
-                                <Link href="/dashboard" className="flex items-center gap-4">
-                                <span className="text-base font-medium text-content2-day">Structured Savings</span>
-                                </Link>
-                            </SidebarMenuButton>
-                            <hr className="w-full text-outline-day" />
                             </CollapsibleContent>
                         </SidebarMenuItem>
                         </Collapsible>
-                        <Collapsible open={isOpen}
-      onOpenChange={setIsOpen} className="group/collapsible">
+                        <Collapsible open={isCpen}
+      onOpenChange={setIsCpen} className="group/collapsible">
                         <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
                             <SidebarMenuButton asChild className="w-full">
-                                <button onClick={toggleMenu} className="flex  items-center flex-row gap-4 justify-between w-full">
+                                <button onClick={toggleMe} className="flex  items-center flex-row gap-4 justify-between w-full">
                                 <div className="flex items-center gap-4">
                                 <Newspaper  className="size-4 text-content2-day"/>
                                 <span className="text-base font-medium text-content2-day">Account</span>
                                 </div>
                                 <ChevronDown className={cn(`transition-transform duration-300 ${
-            isClick ? "-rotate-90" : ""
+            isClick2 ? "-rotate-90" : ""
           }`)} />
                                 </button>
                             </SidebarMenuButton>
                             </CollapsibleTrigger>
                             <CollapsibleContent>
                             <SidebarMenuButton asChild className="w-full flex justify-between items-center">
-                                <Link href="/dashboard/savings/thrift" className="flex items-center gap-4">
-                                <span className="text-base font-medium text-content2-day">Thrift Savings</span>
+                                <Link href="/admin/dashboard/account/savings" className="flex items-center gap-4">
+                                <span className="text-base font-medium text-content2-day">Savings Account</span>
                                 </Link>
                             </SidebarMenuButton>
                             </CollapsibleContent>
-                            <CollapsibleContent>
+                            <CollapsibleContent className="border-b-[1px] border-outline-day">
                             <SidebarMenuButton asChild>
-                                <Link href="/dashboard/savings/categories" className="flex items-center gap-4">
-                                <span className="text-base font-medium text-content2-day">Categories / Cycles</span>
+                                <Link href="/admin/dashboard/account/loans" className="flex items-center gap-4">
+                                <span className="text-base font-medium text-content2-day">Loan Account</span>
                                 </Link>
                             </SidebarMenuButton>
-                            </CollapsibleContent>
-                            <CollapsibleContent>
-                            <SidebarMenuButton asChild>
-                                <Link href="/dashboard" className="flex items-center gap-4">
-                                <span className="text-base font-medium text-content2-day">Structured Savings</span>
-                                </Link>
-                            </SidebarMenuButton>
-                            <hr className="w-full text-outline-day" />
                             </CollapsibleContent>
                         </SidebarMenuItem>
                         </Collapsible>
@@ -199,17 +187,17 @@ const toggleMenu = () => {
         </SidebarGroup>
         <SidebarGroup>
           <SidebarMenu>
-            <SidebarMenuItem>
+          <SidebarMenuItem>
             <SidebarMenuButton asChild>
-                                <Link href="/dashboard" className="flex items-center gap-4">
-                                <BadgeHelp className="size-4 text-content2-day"/>
+                                <Link href="/admin/dashboard/settings" className="flex items-center gap-4">
+                                <Info className="size-4 text-content2-day"/>
                                 <span className="text-base font-medium text-content2-day">Reports</span>
                                 </Link>
                             </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
             <SidebarMenuButton asChild>
-                                <Link href="/dashboard/settings" className="flex items-center gap-4">
+                                <Link href="/admin/dashboard/settings" className="flex items-center gap-4">
                                 <Settings className="size-4 text-content2-day"/>
                                 <span className="text-base font-medium text-content2-day">Settings</span>
                                 </Link>
