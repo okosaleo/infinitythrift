@@ -24,8 +24,8 @@ const getData = async (userId: string) => {
 };
 
 
-export default async function ProfilePage({params}: { params: { userId: string } }) {
-  const { userId } = params;
+export default async function ProfilePage({params}: { params: Promise<{ userId: string }>}) {
+  const { userId } = await params;
   const data = await getData(userId);
   
   return (
@@ -63,7 +63,7 @@ export default async function ProfilePage({params}: { params: { userId: string }
         <div className="flex flex-col gap-2 justify-center items-center mt-8 w-[97%] ">
           <div className="flex items-center gap-2">
           <p className="text-2xl">{data?.name}</p>
-          <p className="text-destructive-day flex gap-2 items-center"><CircleAlert /> {data?.kyc?.status === "PENDING" || "REJCTED" ? (<p className="text-sm text-destructive-day">not verified</p>) : (<p className="text-sm text-positive-day">verified</p>)}</p>
+          <div className="text-destructive-day flex gap-2 items-center"><CircleAlert /> {data?.kyc?.status === "PENDING" || "REJCTED" ? (<p className="text-sm text-destructive-day">not verified</p>) : (<p className="text-sm text-positive-day">verified</p>)}</div>
           </div>
           <p className="text-sm">Signed up: {new Date(data?.createdAt
       ? new Date(data.createdAt).toLocaleDateString("en-GB")
