@@ -3,8 +3,9 @@ import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(
   request: NextRequest,
-  { params: { userId } }: { params: { userId: string } }
+  context: { params: { userId: string } } 
 ) {
+  const { userId } = context.params;
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
