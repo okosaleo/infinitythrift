@@ -3,6 +3,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { prisma } from "@/lib/prisma";
 import { Ban, Banknote, CalendarCheck, ChevronRight, CircleAlert, EllipsisVertical, HandCoins, Wallet } from "lucide-react";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 
 
@@ -23,8 +24,15 @@ const getData = async (userId: string) => {
   return data
 };
 
+interface PageProps {
+  params: { userId: string };
+}
 
-export default async function ProfilePage({params}: {params: {userId: string}}) {
+
+export default async function ProfilePage({params}: PageProps) {
+  if (!params?.userId) {
+    return notFound();
+  }
   const { userId } = await params;
   const data = await getData(userId);
   
@@ -65,7 +73,9 @@ export default async function ProfilePage({params}: {params: {userId: string}}) 
           <p className="text-2xl">{data?.name}</p>
           <p className="text-destructive-day flex gap-2 items-center"><CircleAlert /> {data?.kyc?.status === "PENDING" || "REJCTED" ? (<p className="text-sm text-destructive-day">not verified</p>) : (<p className="text-sm text-positive-day">verified</p>)}</p>
           </div>
-          <p className="text-sm">Signed up: {new Date(data?.createdAt).toLocaleDateString('en-GB')}</p>
+          <p className="text-sm">Signed up: {new Date(data?.createdAt
+      ? new Date(data.createdAt).toLocaleDateString("en-GB")
+      : "Unknown").toLocaleDateString('en-GB')}</p>
         </div>
         <div className="w-full mt-12 p-5">
         {/* Wallets */}

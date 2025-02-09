@@ -5,7 +5,7 @@ import { Dialog,  DialogContent,  DialogFooter, DialogHeader, DialogTitle, Dialo
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Copy, DoorOpen, EllipsisVertical, SquarePen, } from "lucide-react";
+import { ArrowLeft, DoorOpen, EllipsisVertical, SquarePen, } from "lucide-react";
 import Link from "next/link";
 
 
