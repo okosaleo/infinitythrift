@@ -3,9 +3,9 @@ import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(
   request: NextRequest,
-  context: { params: { userId: string } } 
+  { params }: { params: { userId: string | string[] }}
 ) {
-  const { userId } = context.params;
+  const userId = Array.isArray(params.userId) ? params.userId[0] : params.userId;
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
