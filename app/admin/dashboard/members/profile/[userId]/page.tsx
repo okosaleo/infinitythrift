@@ -25,7 +25,7 @@ const getData = async (userId: string) => {
 
 
 export default async function ProfilePage({params}: { params: { userId: string } }) {
-  const { userId } = await params;
+  const { userId } = params;
   const data = await getData(userId);
   
   return (
