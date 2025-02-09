@@ -3,7 +3,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { prisma } from "@/lib/prisma";
 import { Ban, Banknote, CalendarCheck, ChevronRight, CircleAlert, EllipsisVertical, HandCoins, Wallet } from "lucide-react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 
 
 
@@ -24,15 +23,8 @@ const getData = async (userId: string) => {
   return data
 };
 
-interface PageProps {
-  params: { userId: string };
-}
 
-
-export default async function ProfilePage({params}: PageProps) {
-  if (!params?.userId) {
-    return notFound();
-  }
+export default async function ProfilePage({params}: { params: { userId: string } }) {
   const { userId } = await params;
   const data = await getData(userId);
   
