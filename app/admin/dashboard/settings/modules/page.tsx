@@ -38,7 +38,7 @@ export default function SettingsPage() {
     <div>
     <div className="border-b-[1px] border-b-outline-day h-16 w-full flex items-center gap-2 px-4">
 <Link href="/admin/dashboard/settings" ><ArrowLeft className="size-4 text-content-day" /></Link>
-<h1 className="text-2xl font-semi-bold text-content-day">Authentication</h1>
+<h1 className="text-2xl font-semi-bold text-content-day">Modules Settings</h1>
 </div>
 <div className="border-b-[1px] border-b-outline-day h-10 w-full flex items-center gap-2 px-4">
 <h1 className="text-sm font-semi-bold text-content-day ml-3">Settings / Authentication</h1>

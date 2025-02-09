@@ -1,5 +1,4 @@
-import { Popover, PopoverContent } from "@/components/ui/popover";
-import { PopoverTrigger } from "@radix-ui/react-popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ArrowLeft, Ban, ChartNetwork, ChevronRight, CircleCheck, Clock, EllipsisVertical, UserPen } from "lucide-react";
 import Link from "next/link";
 

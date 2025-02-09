@@ -1,5 +1,8 @@
 
-import { Plus } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { ChevronRight, Plus, PlusIcon, Settings } from "lucide-react"
+import Link from "next/link"
 
 
 const savings = [
@@ -33,14 +36,14 @@ const savings = [
         tot: "Total Contribution",
         in: "3,466,000",
         duration: "3 months",
-        range: "51,000 - ",
+        range: "51,000 - infinity",
     },
 ]
 export default function Thriftpage() {
   return (
     <div className="flex flex-col gap-2">
          <div className="border-b-[1px] border-b-outline-day h-16 w-full flex items-center justify-between px-7">
-                <h1 className="md:text-2xl text-xl font-semi-bold text-content-day">Structured Savings</h1>
+                <h1 className="md:text-2xl text-xl font-semi-bold text-content-day">Thrift Savings</h1>
                 <button className='p-2 flex items-center bg-primary-active gap-2 rounded-md'>
                     <Plus className='size-4 text-text-button' />
                     <p className='text-sm text-text-button'>Create Contribution</p>
@@ -49,7 +52,51 @@ export default function Thriftpage() {
         {/*CATEGORIES*/}
         <div className=" w-full md:p-7 p-2  gap-1">
             <div className="flex flex-col gap-5 border-r-[1px] border-r-outline-day items-start justify-start lg:p-2 p-0 lg:w-1/2 w-full">
-               
+            <Link href="/admin/dashboard/settings" className="w-full flex gap-2 items-center justify-end">
+            <Settings className="text-primary-active" />
+            <p className="text-sm text-primary-active">Go to Settings</p>
+            </Link>
+                {savings.map((item) => (
+                     <Card key={item.id} className="border-none shadow-md p-1 w-full ">
+                     <CardHeader className="border-b-[1px] flex items-center flex-row justify-between border-outline-day font-medium text-base">
+                        <CardTitle>
+                        {item.cat}
+                        </CardTitle>   
+                     </CardHeader>
+                     <CardContent className="flex items-center">
+                        <div className="flex flex-col w-[98%] mt-3">
+                            <div className="md:w-[70%] w-full grid grid-cols-2 border-b-[1px] border-b-outline-day py-3">
+                                <div className=" gap-9 items-center text-[12px] text-content2-day w-full">
+                                    <p>{item.tot}</p>
+                                    <p>&#8358;0</p>
+                                    
+                                </div>
+                                <div className="w-full gap-9 items-start text-[12px] text-content-day">
+                                <p>Members</p>
+                                <p>0</p>
+                                </div>
+                            </div>
+                            <div className="text-[12px] mt-3 text-content2-day grid grid-cols-3 gap-2 md:w-[80%] w-full">
+                                <div className="w-full">
+                                <p>Duration</p>
+                                <p className="font-bold">{item.duration}</p>
+                                </div>
+                                <div className="w-full">
+                                <p>Range</p>
+                                <p className="font-bold">{item.range}</p>
+                                </div>
+                                <div className="w-full">
+                                <p>Charge</p>
+                                <p className="font-bold">Fixed</p>
+                                </div>
+                            </div> 
+                        </div>
+                        <div>
+                            <ChevronRight className="size-4 text-content2-day" />
+                        </div>
+                     </CardContent>
+                 </Card>
+                ))}
             </div>
         </div>
     </div>

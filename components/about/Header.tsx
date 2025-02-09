@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Header() {
   return (
     <div className="flex flex-col w-full">
-        <div className="flex flex-col px-12 w-full">-
+        <div className="flex flex-col px-12 w-full">
         <div className="flex items-center justify-center text-3xl text-content-day">
             <h1 className="font-semibold">About</h1>
         </div>

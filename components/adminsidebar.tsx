@@ -112,7 +112,7 @@ const toggleMe = () => {
                             <CollapsibleContent className="border-b-[1px] border-outline-day">
                             <SidebarMenuButton asChild>
                                 <Link href="/admin/dashboard/savings/categories" className="flex items-center gap-4">
-                                <span className="text-base font-medium text-content2-day">Categories / Cycles</span>
+                                <span className="text-base font-medium text-content2-day">Strucured Savings</span>
                                 </Link>
                             </SidebarMenuButton>
                             </CollapsibleContent>
@@ -189,7 +189,7 @@ const toggleMe = () => {
           <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-                                <Link href="/admin/dashboard/settings" className="flex items-center gap-4">
+                                <Link href="/admin/dashboard/support" className="flex items-center gap-4">
                                 <Info className="size-4 text-content2-day"/>
                                 <span className="text-base font-medium text-content2-day">Reports</span>
                                 </Link>

@@ -1,10 +1,15 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./lib/prisma";
-import { sendVerificationEmail } from "./actions/email";
+import { sendEmail, sendVerificationEmail } from "./actions/email";
 import { openAPI } from "better-auth/plugins";
+import { admin } from "better-auth/plugins";
 
 export const auth = betterAuth({
+  rateLimit: {
+    window: 10, // time window in seconds
+    max: 100, // max requests in the window
+},
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
@@ -13,14 +18,21 @@ export const auth = betterAuth({
     updateAge: 60 * 60 * 12,
     cookieCache: {
       enabled: true,
-      maxAge: 60 * 60 *24 // Cache duration in seconds
+      maxAge: 5 * 60 * 60 // Cache duration in seconds
   }
   },
-  plugins: [openAPI()],
+  plugins: [openAPI(), admin({
+    impersonationSessionDuration: 60 * 60 * 24 * 7, // 7 days
+  })],
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
-    
+    sendResetPassword: async ({ user, url}) => {
+      await sendEmail({
+       recipientEmail: user.email,
+       url
+      });
+    },
   },
   emailVerification: {
     sendOnSignUp: true,

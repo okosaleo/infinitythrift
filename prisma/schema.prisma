@@ -14,6 +14,80 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum ThriftCategory {
+  BRONZE
+  SILVER
+  GOLD
+  INFINITY
+}
+
+enum LoanType {
+  TYPE_1
+  TYPE_2
+  TYPE_3
+}
+
+enum LoanStatus {
+  PENDING
+  APPROVED
+  ACTIVE
+  PAID
+  DEFAULTED
+  REJECTED
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  LOAN_DISBURSEMENT
+  LOAN_REPAYMENT
+  SAVINGS_DEPOSIT
+  SAVINGS_WITHDRAWAL
+}
+
+enum SavingsCategoryType {
+  THREE_MONTHS
+  SIX_MONTHS
+  NINE_MONTHS
+}
+
+enum SavingsStatus {
+  ACTIVE
+  COMPLETED
+  WITHDRAWN
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum LoanRequestStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum IdentificationType {
+  NATIONAL_ID
+  PASSPORT
+  DRIVERS_LICENSE
+  VOTERS_CARD
+}
+
+enum KYCStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id            String    @id @default(cuid()) @map("_id")
   name          String
@@ -29,6 +103,14 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  thriftSavings     ThriftSavings[]
+  categorySavings   CategorySavings[]
+  structuredSavings StructuredSavings[]
+  loans         Loan[]
+  loanRequests  LoanRequest[]
+  transactions  Transaction[]
+  wallet        Wallet?
+  kyc           KYC?
   @@index([id]) 
 }
 
@@ -71,4 +153,158 @@ model Verification {
   expiresAt              DateTime
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
+}
+
+
+model ThriftSavings {
+  id           String         @id @default(cuid())
+  userId       String
+  user         User           @relation(fields: [userId], references: [id])
+  category     ThriftCategory
+  currentAmount Decimal        @default(0.0)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model CategorySavings {
+  id           String              @id @default(cuid())
+  userId       String
+  user         User                @relation(fields: [userId], references: [id])
+  category     SavingsCategoryType
+  amount       Decimal
+  startDate    DateTime
+  endDate      DateTime
+  interestRate Float               @default(5.0)
+  status       SavingsStatus       @default(ACTIVE)
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+}
+
+model StructuredSavings {
+  id            String         @id @default(cuid())
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
+  name          String
+  targetAmount  Decimal
+  currentAmount Decimal         @default(0.0)
+  status        SavingsStatus   @default(ACTIVE)
+  startDate     DateTime
+  endDate       DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model LoanProduct {
+  id          String   @id @default(cuid())
+  type        LoanType @unique
+  interestRate Float
+  maxAmount   Decimal
+  duration    Int      // Duration in months
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+   loans       Loan[]   @relation("LoanToProduct")
+}
+
+model Loan {
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+  product      LoanProduct @relation(name: "LoanToProduct", fields: [loanProductId], references: [id])
+  loanProductId String
+  amount       Decimal
+  amountDue    Decimal
+  amountPaid   Decimal    @default(0.0)
+  status       LoanStatus @default(PENDING)
+  disbursedAt  DateTime?
+  dueDate      DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  balance   Decimal  @default(0)
+  currency  String   @default("NGN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Transaction {
+  id           String            @id @default(cuid())
+  userId       String
+  user         User              @relation(fields: [userId], references: [id])
+  amount       Decimal
+  type         TransactionType
+  status       TransactionStatus @default(PENDING)
+  reference    String?           @unique
+  description  String?
+  metadata     Json?
+  loanId       String?
+  savingsId    String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model LoanRequest {
+  id           String             @id @default(cuid())
+  userId       String
+  user         User               @relation(fields: [userId], references: [id])
+  loanType     LoanType
+  amount       Decimal
+  duration     Int
+  status       LoanRequestStatus  @default(PENDING_REVIEW)
+  reason       String?
+  reviewedBy   String?
+  reviewedAt   DateTime?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([loanType])
+}
+
+
+model KYC {
+  id              String           @id @default(cuid())
+  userId          String           @unique
+  user            User             @relation(fields: [userId], references: [id])
+  firstName       String
+  lastName        String
+  dob             DateTime
+  gender          Gender
+  address         String
+  state           String
+  city            String
+  proofOfAddress  String  // URL to uploaded document
+  occupation      String
+  employer        String
+  monthlyIncome   Decimal
+  bvn             String  @db.VarChar(11)  // Nigerian BVN is 11 digits
+  idType          IdentificationType
+  idNumber        String
+  idImage         String  // URL to front of ID document
+  idSelfie        String  // URL to selfie with ID document
+  status          KYCStatus       @default(PENDING)
+  reviewedBy      String?         // Admin ID who reviewed
+  reviewedAt      DateTime?
+  rejectionReason String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([bvn])
+  @@index([idNumber])
 }

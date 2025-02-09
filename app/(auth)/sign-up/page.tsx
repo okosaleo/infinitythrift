@@ -60,7 +60,7 @@ export default function SignUp() {
 	};
 
   return (
-    <div className="bg-[url('/img/infi.png')] lg:bg-[length:70vw_100vh] bg-[length:100vw_100vh] bg-center w-full flex items-center justify-center h-screen relative">
+    <div className="bg-[url('https://utfs.io/f/mLASHSxEsNLitNpkuevdDyTUwOs4lMG1QKpfbLqNzXERgS7I')] lg:bg-[length:70vw_100vh] bg-[length:100vw_100vh] bg-center w-full flex items-center justify-center h-screen relative">
         <Card className=" mx-auto max-w-md max-h-[92vh] w-full h-fit flex flex-col items-center justify-center p-2 bg-text-button absolute ">
         <CardHeader className="flex flex-col items-center mb-[-20] mt-[-25]">
             <Image src="/img/infilogo.png" alt="logo" width={112} height={45} className="object-cover mb-[-23]" />

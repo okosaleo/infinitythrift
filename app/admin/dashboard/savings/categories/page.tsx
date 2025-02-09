@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChevronRight, Plus, PlusIcon } from "lucide-react"
+import { ChevronRight, Plus, PlusIcon, Settings } from "lucide-react"
+import Link from "next/link"
 
 
 const cycles = [
@@ -48,6 +49,10 @@ export default function page() {
         {/*CATEGORIES*/}
         <div className=" w-full md:p-7 p-2  gap-1">
             <div className="flex flex-col gap-5 border-r-[1px] border-r-outline-day items-start justify-start lg:p-2 p-0 lg:w-1/2 w-full">
+            <Link href="/admin/dashboard/settings" className="w-full flex gap-2 items-center justify-end">
+            <Settings className="text-primary-active" />
+            <p className="text-sm text-primary-active">Go to Settings</p>
+            </Link>
                 {cycles.map((item) => (
                      <Card key={item.id} className="border-none shadow-md p-1 w-full ">
                      <CardHeader className="border-b-[1px] flex items-center flex-row justify-between border-outline-day font-medium text-base">
@@ -60,21 +65,31 @@ export default function page() {
                      </CardHeader>
                      <CardContent className="flex items-center">
                         <div className="flex flex-col w-[98%] mt-3">
-                            <div className="w-full flex flex-col gap-1 border-b-[1px] border-b-outline-day py-3">
-                                <div className="flex flex-row gap-9 items-center text-sm text-content2-day">
+                            <div className="md:w-[70%] w-full grid grid-cols-3 border-b-[1px] border-b-outline-day py-3">
+                                <div className=" gap-9 items-center text-[12px] text-content2-day w-full">
                                     <p> Total Savings</p>
-                                    <p>Total Interest</p>
-                                    <p>Members</p>
-                                </div>
-                                <div className="flex flex-row gap-9 items-start text-[12px] text-content-day">
                                     <p>&#8358;{item.tot}</p>
-                                    <p>&#8358;{item.in}</p>
-                                    <p>43</p>
+                                    
+                                </div>
+                                <div className="w-full gap-9 items-start text-[12px] text-content-day">
+                                <p>Total Interest</p>
+                                <p>&#8358;{item.in}</p>
+                                </div>
+                                <div className="w-full gap-9 items-start text-[12px] text-content-day">
+                                <p>Members</p>
+                                <p>0</p>
                                 </div>
                             </div>
-                            <div className="text-[12px] mt-3 text-content2-day">
-                                <p>Members(28)</p>
-                                </div> 
+                            <div className="text-[12px] mt-3 text-content2-day grid grid-cols-2 gap-2 md:w-[30%] w-[50%]">
+                                <div className="w-full">
+                                <p>Duration</p>
+                                <p className="font-bold">{item.duration}</p>
+                                </div>
+                                <div className="w-full">
+                                <p>Interest</p>
+                                <p className="font-bold">{item.interest}</p>
+                                </div>
+                            </div> 
                         </div>
                         <div>
                             <ChevronRight className="size-4 text-content2-day" />

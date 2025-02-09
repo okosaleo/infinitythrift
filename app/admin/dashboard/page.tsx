@@ -1,5 +1,5 @@
 import { Chart } from "@/components/chart/chart";
-import { Banknote, CalendarCheck, CircleArrowOutUpRight, HandCoins, MessageCircleIcon, MessageCircleQuestion, UsersRound } from "lucide-react";
+import { Banknote, CalendarCheck, CircleArrowOutUpRight, Clock, ClockArrowDown, HandCoins, MessageCircleIcon, MessageCircleQuestion, Users, UsersRound } from "lucide-react";
 
   const items = [
     {
@@ -50,10 +50,10 @@ export default function page() {
             <h1 className="text-xl font-semibold text-content2-day">Overview</h1>
           </div>
           {/* Cards */}
-          <div className="flex lg:flex-row flex-col flex-wrap md:gap-5 gap-3 ">
+          <div className="grid lg:grid-cols-3 grid-cols-1 md:gap-5 gap-3 ">
        
          {items.map((item) => (
-           <div key={item.id} className="bg-gradient-to-r from-hover-btn to-[#2e1905] lg:w-1/4 w-full h-32 rounded-md flex justify-between p-5  items-center">
+           <div key={item.id} className="bg-gradient-to-r from-hover-btn to-[#2e1905] lg:w-full w-full h-32 rounded-md flex justify-between p-5  items-center">
             <div className="text-text-button flex flex-col gap-7">
               <p>{item.value}</p>
               <p>{item.des}</p>
@@ -102,7 +102,12 @@ export default function page() {
             <h2 className="text-xl text-content-day font-bold">Activities</h2>
             <button className="p-2 bg-light-overlay rounded-2xl">See All</button>
           </div>
-          <div></div>
+          <div className="w-full items-center justify-center h-[50vh]">
+            <div className="justify-center items-center mt-24 flex flex-col gap-3">
+              <ClockArrowDown className="size-6" />
+              <p>All activities by members — savings, loan repayment will appear here.</p>
+            </div>
+          </div>
         </div>
         <div></div>
       </div>
@@ -114,7 +119,12 @@ export default function page() {
             <h2 className="text-xl text-content-day font-bold">Members Ranking</h2>
             <button className="p-2 bg-light-overlay rounded-2xl">See All</button>
           </div>
-          <div></div>
+          <div className="w-full items-center justify-center h-[50vh]">
+            <div className="justify-center items-center mt-24 flex flex-col gap-3">
+              <Users className="size-6 text-primary-day" />
+              <p>Members with the most savings will appear here.All activities by members — savings, loan repayment will appear here.</p>
+            </div>
+          </div>
         </div>
         <div></div>
       </div>
