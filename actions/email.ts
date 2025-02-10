@@ -28,12 +28,6 @@ export const sendVerificationEmail = async ({
 </head>
 <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
     <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-        <!-- Header -->
-        <div style="text-align: center; padding: 0; width: 100%; height: 300px">
-    <img src="https://utfs.io/f/mLASHSxEsNLiuuEsIS1jozy9UTrqw6tkM4On82eKlLvIfSu7" 
-         alt="Company Logo" 
-         style="width: 100%; height: 300px; display: block; object-fit: cover;">
-</div>
 
         <!-- Main Content -->
         <div style="background-color: #ffffff; padding: 30px 20px; border-radius: 8px; margin-top: 20px;">
