@@ -24,11 +24,13 @@ export default function page() {
           <p className="text-[12px]">Change password</p>
         </div>
         <div className="flex lg:flex-row flex-col lg:items-center items-start lg:gap-20 gap-3">
+          <form>
           <div className="flex flex-col gap-1">
             <Label className="text-sm">Password</Label>
             <Input type="password" className="w-64"/>
           </div>
           <Button className="mt-5">Change Password</Button>
+          </form>
         </div>
         <div>
           <p className="text-[13px]">Last Updated: 07/05/2024 at 5:00PM</p>

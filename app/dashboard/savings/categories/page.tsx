@@ -1,5 +1,9 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { ChevronRight, PlusIcon } from "lucide-react"
 
 
@@ -34,6 +38,7 @@ export default function page() {
             </div>
         {/*CATEGORIES*/}
         <div className=" w-full md:p-7 p-2  gap-1">
+            <Dialog>
             <div className="flex flex-col gap-5 border-r-[1px] border-r-outline-day items-start justify-start lg:p-2 p-0 lg:w-1/2 w-full">
                 {cycles.map((item) => (
                      <Card key={item.id} className="border-none shadow-md p-1 w-full ">
@@ -57,7 +62,7 @@ export default function page() {
                                 </div>
                             </div>
                             <div className="text-[12px] mt-3 text-content2-day">
-                                <p>Members(28)</p>
+                                <p>Members(0)</p>
                                 </div> 
                         </div>
                         <div>
@@ -65,14 +70,33 @@ export default function page() {
                         </div>
                      </CardContent>
                      <CardFooter>
+                        <DialogTrigger>
                         <Button>
                             <PlusIcon className="size-4 text-text-button"/>
                             <p>Join Savings</p>
                         </Button>
+                        </DialogTrigger>
                      </CardFooter>
                  </Card>
                 ))}
             </div>
+            <DialogContent className="border-primary-day">
+                <DialogHeader className="flex items-center justify-center">
+                    <DialogTitle>Enter Saving Details</DialogTitle>
+                </DialogHeader>
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-2 mt-2 text-content2-day">
+                     <Label>Amount</Label>
+                     <Input placeholder="e.g 4,000,000" />
+                  </div>
+                  <div className="flex flex-col gap-2 mt-2 text-content2-day">
+                     <Label>Description</Label>
+                     <Textarea placeholder="Add note" />
+                  </div>
+                  <Button>Proceed</Button>
+                </div>
+            </DialogContent>
+            </Dialog>
         </div>
     </div>
   )

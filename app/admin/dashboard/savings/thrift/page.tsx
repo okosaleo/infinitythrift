@@ -1,7 +1,12 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChevronRight, Plus, PlusIcon, Settings } from "lucide-react"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { ChevronDown, ChevronRight, Plus, PlusIcon, Settings } from "lucide-react"
 import Link from "next/link"
 
 
@@ -42,13 +47,65 @@ const savings = [
 export default function Thriftpage() {
   return (
     <div className="flex flex-col gap-2">
+        <Dialog>
          <div className="border-b-[1px] border-b-outline-day h-16 w-full flex items-center justify-between px-7">
                 <h1 className="md:text-2xl text-xl font-semi-bold text-content-day">Thrift Savings</h1>
+                <DialogTrigger asChild className="border-0">
                 <button className='p-2 flex items-center bg-primary-active gap-2 rounded-md'>
                     <Plus className='size-4 text-text-button' />
+                   
                     <p className='text-sm text-text-button'>Create Contribution</p>
                 </button>
+                </DialogTrigger>
+                <DialogContent className="border-0 shadow-md h-fit">
+                    <DialogHeader className="flex items-center justify-center">
+                        <DialogTitle>Create Thrift Contribution</DialogTitle>
+                    </DialogHeader>
+                    <form>
+                    <div className="mt-5 text-content2-day flex flex-col gap-5">
+                        <div className="flex flex-col gap-2">
+                            <Label>Thrift Category</Label>
+                            <DropdownMenu>
+                            <DropdownMenuTrigger>
+                            <div className="flex focus-visible:ring-1 items-center rounded-md border border-outline-day px-2">
+                                <Input className="border-0 focus-visible:ring-0" />
+                                <ChevronDown />
+                            </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className='border-0 w-[30vw] mr-3'>
+                                <DropdownMenuItem className="flex flex-col gap-2 items-start text-content2-day">
+                                    <p>Bronze</p>
+                                    <p> ₦1000-5000</p>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                                
+                            </DropdownMenu>
+                        </div>
+                        <div>
+                            <div>
+                                <Label className="text-content2-day"> Daily Amount (₦)</Label>
+                                <Input />
+                            </div>
+                        </div>
+                        <div>
+                        <div>
+                                <Label className="text-content2-day">Recepient</Label>
+                                <Input />
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <Label>Description</Label>
+                                <Textarea />
+                            </div>
+                        </div>
+                    </div>
+                    
+                        <Button className="w-full mt-3">Create</Button>
+                </form>
+                </DialogContent>
             </div>
+            </Dialog>
         {/*CATEGORIES*/}
         <div className=" w-full md:p-7 p-2  gap-1">
             <div className="flex flex-col gap-5 border-r-[1px] border-r-outline-day items-start justify-start lg:p-2 p-0 lg:w-1/2 w-full">

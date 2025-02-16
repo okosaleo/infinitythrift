@@ -16,13 +16,6 @@ const linknavs = [
       url: "/dashboard/settings/authen/2FA",
 
   },
-  {
-      id: 3,
-      title: "Pin Setting",
-      desc: "Manage Pin",
-      url: "/dashboard/settings/authen/pin",
-
-  },
 ]
 
 

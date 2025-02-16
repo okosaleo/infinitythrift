@@ -14,79 +14,7 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-enum ThriftCategory {
-  BRONZE
-  SILVER
-  GOLD
-  INFINITY
-}
 
-enum LoanType {
-  TYPE_1
-  TYPE_2
-  TYPE_3
-}
-
-enum LoanStatus {
-  PENDING
-  APPROVED
-  ACTIVE
-  PAID
-  DEFAULTED
-  REJECTED
-}
-
-enum TransactionType {
-  DEPOSIT
-  WITHDRAWAL
-  LOAN_DISBURSEMENT
-  LOAN_REPAYMENT
-  SAVINGS_DEPOSIT
-  SAVINGS_WITHDRAWAL
-}
-
-enum SavingsCategoryType {
-  THREE_MONTHS
-  SIX_MONTHS
-  NINE_MONTHS
-}
-
-enum SavingsStatus {
-  ACTIVE
-  COMPLETED
-  WITHDRAWN
-}
-
-enum TransactionStatus {
-  PENDING
-  COMPLETED
-  FAILED
-}
-
-enum LoanRequestStatus {
-  PENDING_REVIEW
-  APPROVED
-  REJECTED
-}
-
-enum Gender {
-  MALE
-  FEMALE
-  OTHER
-}
-
-enum IdentificationType {
-  NATIONAL_ID
-  PASSPORT
-  DRIVERS_LICENSE
-  VOTERS_CARD
-}
-
-enum KYCStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
 
 model User {
   id            String    @id @default(cuid()) @map("_id")
@@ -155,6 +83,30 @@ model Verification {
   updatedAt              DateTime @updatedAt
 }
 
+model ThriftSavingsTracker {
+  id              String         @id @default(cuid())
+  thriftSavingsId String
+  // Relation to the ThriftSavings record (the parent record)
+  thriftSavings   ThriftSavings  @relation(fields: [thriftSavingsId], references: [id])
+  
+  // A field to indicate which week this tracker is for. You can decide how to represent a week,
+  // for example by storing the date of the Monday (or any day) of that week.
+  weekStart       DateTime
+  
+  // 7 Boolean fields to mark whether a contribution was made on that day.
+  monday          Boolean        @default(false)
+  tuesday         Boolean        @default(false)
+  wednesday       Boolean        @default(false)
+  thursday        Boolean        @default(false)
+  friday          Boolean        @default(false)
+  saturday        Boolean        @default(false)
+  sunday          Boolean        @default(false)
+  
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+
 
 model ThriftSavings {
   id           String         @id @default(cuid())
@@ -162,6 +114,7 @@ model ThriftSavings {
   user         User           @relation(fields: [userId], references: [id])
   category     ThriftCategory
   currentAmount Decimal        @default(0.0)
+  trackers      ThriftSavingsTracker[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 }
@@ -282,6 +235,7 @@ model KYC {
   user            User             @relation(fields: [userId], references: [id])
   firstName       String
   lastName        String
+  number          String
   dob             DateTime
   gender          Gender
   address         String
@@ -296,7 +250,7 @@ model KYC {
   idNumber        String
   idImage         String  // URL to front of ID document
   idSelfie        String  // URL to selfie with ID document
-  status          KYCStatus       @default(PENDING)
+  status          KYCStatus       @default(PENDING) 
   reviewedBy      String?         // Admin ID who reviewed
   reviewedAt      DateTime?
   rejectionReason String?
@@ -307,4 +261,78 @@ model KYC {
   @@index([status])
   @@index([bvn])
   @@index([idNumber])
+}
+
+enum ThriftCategory {
+  BRONZE
+  SILVER
+  GOLD
+  INFINITY
+}
+
+enum LoanType {
+  TYPE_1
+  TYPE_2
+  TYPE_3
+}
+
+enum LoanStatus {
+  PENDING
+  APPROVED
+  ACTIVE
+  PAID
+  DEFAULTED
+  REJECTED
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  LOAN_DISBURSEMENT
+  LOAN_REPAYMENT
+  SAVINGS_DEPOSIT
+  SAVINGS_WITHDRAWAL
+}
+
+enum SavingsCategoryType {
+  THREE_MONTHS
+  SIX_MONTHS
+  NINE_MONTHS
+}
+
+enum SavingsStatus {
+  ACTIVE
+  COMPLETED
+  WITHDRAWN
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum LoanRequestStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum IdentificationType {
+  NATIONAL_ID
+  PASSPORT
+  DRIVERS_LICENSE
+  VOTERS_CARD
+}
+
+enum KYCStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

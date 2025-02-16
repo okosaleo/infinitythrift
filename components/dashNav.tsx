@@ -21,9 +21,8 @@ export default async function Navbar() {
     headers: await headers()
   })
   
-  if(!session) {
+  if(!session || session == null) {
     redirect("/sign-in");
-    return null;
   }
 
   const data = await getData(session?.user.id);

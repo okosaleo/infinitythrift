@@ -1,9 +1,37 @@
+import { auth } from "@/auth";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ArrowLeft, Ban, ChartNetwork, ChevronRight, CircleCheck, Clock, EllipsisVertical, UserPen } from "lucide-react";
+import { prisma } from "@/lib/prisma";
+import { ArrowLeft, Ban, ChartNetwork, ChevronRight, CircleCheck, CircleX, Clock, EllipsisVertical, UserPen } from "lucide-react";
+import { headers } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+const getData = async (userId: string) => {
+  const data = await prisma.user.findUnique({
+    where: {
+        id: userId,
+    },
+    include: {
+        kyc: true,
+    }
+  });
+
+  return data
+};
 
 
-export default function Profilepage() {
+export default async function Profilepage() {
+    const session = await auth.api.getSession({
+          headers: await headers()
+        })
+        
+        if(!session || session === null) {
+          redirect("/sign-in");
+        }
+    
+        const userId = session.user.id
+      
+        const data = await getData(userId);
   return (
     <div className="flex flex-col gap-2">
          <div className="border-b-[1px] border-b-outline-day h-16 w-full flex items-center gap-2 px-4">
@@ -22,14 +50,26 @@ export default function Profilepage() {
               <div className="flex flex-col gap-4 items-center justify-center">
                   <div className="w-20 h-20 bg-primary-nav rounded-full"></div>
                   <div className="flex gap-5 items-center justify-center">
-                    <p className="text-xl font-medium">Okosa Leonard</p>
+                    <p className="text-xl font-medium">{data?.name}</p>
                    </div>
                </div>
+               {data?.kyc?.status === "PENDING" || "REJECTED" ? (
+                  <Link href='/dashboard/settings/kyc'>
+                <div className="flex gap-2 items-center bottom-0">
+                <CircleX className="text-destructive" />
+                <p className="text-[12px] text-destructive">Not Verified</p>
+                <ChevronRight className="size-4" />
+               </div>
+               </Link>
+               ) : (
+                <Link href='/dashboard/settings/kyc'>
                <div className="flex gap-2 items-center bottom-0">
                         <CircleCheck className="text-positive-day" />
                         <p className="text-[12px] text-positive-day">Verified</p>
                         <ChevronRight className="size-4" />
             </div>
+            </Link>
+            )}
           </div>
           <Popover>
             <PopoverTrigger>
@@ -63,23 +103,23 @@ export default function Profilepage() {
             <div className="flex flex-wrap lg:flex-row flex-col lg:gap-20 gap-7 w-full">
                 <div className="flex flex-col gap-1"> 
                     <h4 className="font-medium">Membership ID</h4>
-                    <p>#12979</p>
+                    <p>{data?.id.slice(0, 8)}</p>
                 </div>
                 <div className="flex flex-col gap-1">
                 <h4 className="font-medium">Phone Number</h4>
-                <p>+234 0977777777</p>
+                <p>{data?.kyc?.number || <p>N/A</p>}</p>
                 </div>
                 <div className="flex flex-col gap-1">
                 <h4 className="font-medium">Email Address</h4>
-                <p>heyslayer@gmail.com</p>
+                <p>{data?.email}</p>
                 </div>
                 <div className="flex flex-col gap-1">
                 <h4 className="font-medium">Gender</h4>
-                <p>Male</p>
+                <p>{data?.kyc?.gender || <p>N/A</p>}</p>
                 </div>
                 <div className="flex flex-col gap-1">
                 <h4 className="font-medium">Date of Birth</h4>
-                <p>03/10/1978</p>
+                <p>{data?.kyc?.dob.toLocaleDateString("en-GB") || <p>N/A</p>}</p>
                 </div>
             </div>
         </div>
@@ -89,19 +129,19 @@ export default function Profilepage() {
             <div className="flex  lg:flex-row flex-col lg:gap-20 gap-7 w-full ">
                 <div className="flex flex-col gap-1"> 
                     <h4 className="font-medium">Street</h4>
-                    <p>47, Allen Avenue</p>
+                    <p>{data?.kyc?.address || <p>N/A</p>}</p>
                 </div>
                 <div className="flex flex-col gap-1">
                 <h4 className="font-medium">City</h4>
-                <p>Ikeja</p>
+                <p>{data?.kyc?.city || <p>N/A</p>}</p>
                 </div>
                 <div className="flex flex-col gap-1">
                 <h4 className="font-medium">State</h4>
-                <p>Lagos</p>
+                <p>{data?.kyc?.state || <p>N/A</p>}</p>
                 </div>
                 <div className="flex flex-col gap-1">
                 <h4 className="font-medium">Country</h4>
-                <p>Nigeria.</p>
+                <p>Nigeria</p>
                 </div>
             </div>
         </div>

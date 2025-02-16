@@ -1,22 +1,114 @@
+import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
-import { Banknote, CalendarCheck, HandCoins, Info, MessageCircleQuestion, Plus, Wallet } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { prisma } from "@/lib/prisma";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import { ArrowRightLeft, Banknote, CalendarCheck, HandCoins, Info, MessageCircleQuestion, Plus, Wallet } from "lucide-react";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import KYC from "./kyc/page";
+import Link from "next/link";
 
-export default function DashBoardPage() {
+
+
+const getData = async (userId: string) => {
+  const data = await prisma.user.findUnique({
+    where: {
+        id: userId,
+    },
+    include: {
+      kyc: true,
+      wallet: true,
+      thriftSavings: true,
+      structuredSavings: true,
+      loans: true,
+      transactions: true,
+    },
+  });
+
+  return data
+};
+
+
+export default async function DashBoardPage() {
+   const session = await auth.api.getSession({
+      headers: await headers()
+    })
+    
+    if(!session || session === null) {
+      redirect("/sign-in");
+    }
+
+    const userId = session.user.id
+  
+    const data = await getData(userId);
+
+
+     // 1. Personal Wallet Balance
+  const walletBalance = data?.wallet?.balance || 0;
+
+  // 2. Thrift Savings Balance - sum currentAmount from each thrift savings record
+  const thriftSavingsBalance = data?.thriftSavings?.reduce((acc, item) => {
+    return acc + Number(item.currentAmount);
+  }, 0) || 0;
+
+  // 3. Structured Savings Balance - sum currentAmount from each structured savings record
+  const structuredSavingsBalance = data?.structuredSavings?.reduce((acc, item) => {
+    return acc + Number(item.currentAmount);
+  }, 0) || 0;
+
+  // 4. Loan Balance - compute outstanding amount for each loan
+  const loanBalance = data?.loans?.reduce((acc, loan) => {
+    const outstanding = Number(loan.amountDue) - Number(loan.amountPaid);
+    return acc + outstanding;
+  }, 0) || 0;
+
+  // Optional: Formatter for Nigerian Naira
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+    }).format(amount);
+  };
+
+
   return (
     <div className="flex flex-col w-full p-4 gap-12">
       {/* Verification */}
-      <div className="flex items-center justify-center">
-        <div className="border-[1px] border-[#db2222] rounded-sm lg:w-2/3 w-full h-12 flex justify-between items-center bg-[#fee9e8]">
-        <div className="flex items-center">
-          <div className="px-2"><Info className="text-icon-day size-7" /></div>
-          <div className="flex flex-col items-start">
-            <h2 className="text-content-day md:text-[13px] text-[12px] font-semibold">Account not Verified</h2>
-            <p className="text-content2-day md:text-[10px] text-[9px] font-light">Complete your KYC verification to gain full access.</p>
-          </div>
+      {!data?.kyc && (
+        <Dialog>
+  <div className="flex items-center justify-center">
+    <div className="border-[1px] border-[#db2222] rounded-sm lg:w-2/3 w-full h-12 flex justify-between items-center bg-[#fee9e8]">
+      <div className="flex items-center">
+        <div className="px-2">
+          <Info className="text-icon-day size-7" />
         </div>
-        <div className="p-2"><Button className="text-[12px]">Complete KYC</Button></div>
+        <div className="flex flex-col items-start">
+          <h2 className="text-content-day md:text-[13px] text-[12px] font-semibold">
+            Account not Verified
+          </h2>
+          <p className="text-content2-day md:text-[10px] text-[9px] font-light">
+            Complete your KYC verification to gain full access.
+          </p>
         </div>
       </div>
+      <div className="p-2">
+        <DialogTrigger>
+        <Button className="text-[12px]">Complete KYC</Button>
+        </DialogTrigger>
+      </div>
+    </div>
+  </div>
+  <DialogContent  className="border-primary-day">
+    <DialogHeader className="flex items-center justify-between">
+      <DialogTitle className="text-content-day">Complete KYC</DialogTitle>
+      <DialogTitle className="text-content2-day text-sm font-light">Personal Information</DialogTitle>
+    </DialogHeader>
+    <KYC />
+  </DialogContent>
+  </Dialog>
+)}
+
       {/* OverView */}
       <div className="w-full">
         <div className="mb-7">
@@ -28,7 +120,7 @@ export default function DashBoardPage() {
         <div className=" justify-between flex">
           <div className="flex flex-col gap-1">
             <p className="text-text-button text-[13px]">PERSONAL WALLET</p>
-            <p className="text-text-button text-[15px] font-semibold"> &#8358; 12,093,812.00</p>
+            <p className="text-text-button text-[15px] font-semibold">  {formatCurrency(Number(walletBalance))}</p>
           </div>
           <div className="h-10 w-10 rounded-md bg-[#efefef3b] flex items-center justify-center">
             <Wallet className="size-5 text-text-button" /></div>
@@ -41,7 +133,7 @@ export default function DashBoardPage() {
         <div className=" justify-between flex">
           <div className="flex flex-col gap-1">
             <p className="text-text-button text-[13px]">THRIFT SAVINGS</p>
-            <p className="text-text-button text-[15px] font-semibold"> &#8358; 12,093,812.00</p>
+            <p className="text-text-button text-[15px] font-semibold">   {formatCurrency(thriftSavingsBalance)}</p>
           </div>
           <div className="h-10 w-10 rounded-md bg-[#efefef3b] flex items-center justify-center">
             <CalendarCheck className="size-5 text-text-button" /></div>
@@ -53,8 +145,8 @@ export default function DashBoardPage() {
         <div className=" justify-between flex">
           <div className="flex flex-col gap-1">
             <p className="text-text-button text-[13px]">SAVINGS</p>
-            <p className="text-text-button text-[15px] font-semibold"> &#8358; 12,093,812.00</p>
-            <p className="text-text-button text-[12px] font-semibold">Interest<span className="text-[#79f29b] text-[12px] font-semibold"> &#8358; 12,093,812.00</span></p>
+            <p className="text-text-button text-[15px] font-semibold">  {formatCurrency(structuredSavingsBalance)}</p>
+            <p className="text-text-button text-[12px] font-semibold">Interest<span className="text-[#79f29b] text-[12px] font-semibold"> {" "}{formatCurrency(0)}</span></p>
           </div>
           <div className="h-10 w-10 rounded-md bg-[#efefef3b] flex items-center justify-center">
             <HandCoins className="size-5 text-text-button" /></div>
@@ -67,13 +159,13 @@ export default function DashBoardPage() {
         <div className=" justify-between flex">
           <div className="flex flex-col gap-1">
             <p className="text-text-button text-[13px]">LOAN</p>
-            <p className="text-text-button text-[15px] font-semibold"> &#8358; 0.00</p>
+            <p className="text-text-button text-[15px] font-semibold"> &  {formatCurrency(loanBalance)}</p>
           </div>
           <div className="h-10 w-10 rounded-md bg-[#efefef3b] flex items-center justify-center">
             <Banknote className="size-5 text-text-button" /></div>
           </div>
           <div className="flex items-start w-full justify-between">
-            <p className="text-[12px] text-text-button ">Installment &#8358; 0.00</p>
+            <p className="text-[12px] text-text-button ">Installment {formatCurrency(0)}</p>
             <button className="bg-text-button text-[11px] p-1 flex items-center w-1/3 rounded-md text-content-day justify-center gap-1">Payback</button>
           </div>
         </div>
@@ -86,11 +178,15 @@ export default function DashBoardPage() {
             <p className="text-sm font-semibold text-content-day">Need some emergency fund?</p>
           </div>
           <div className="ml-7">
-          <p className="text-[12px] font-light text-content-day"> You&apos;re eligible for Loan Type 1</p>
+          <p className="text-[12px] font-light text-content-day"> You might be eligible for Loan Type 1</p>
           </div>
         </div>
         <div>
-        <div className="p-2"><Button className="text-[12px]">Request Loan</Button></div>
+        <div className="p-2">
+          <Link href="/dashboard/loans">
+          <Button className="text-[12px]">Request Loan</Button>
+          </Link>
+          </div>
         </div>
       </div>
       <div className="flex flex-col ml-3 w-full">
@@ -99,11 +195,22 @@ export default function DashBoardPage() {
             <h2 className="text-xl text-content-day font-bold">My Transaction History</h2>
             <button className="p-2 bg-light-overlay rounded-2xl">See All</button>
           </div>
-          <div></div>
+          {data?.transactions.length ? (
+          <div>theree is</div>
+        ) : (
+          <div className="flex flex-col gap-2 justify-center items-center h-[40vh]">
+            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-outline-day">
+            <ArrowRightLeft className="size-6 text-icon-day" />
+            </div>
+            <p>All transaction history— savings, deposit, withdrawals, loan repayment will appear here.</p>
+          </div>
+        )
+          }
         </div>
         <div></div>
       </div>
-      <div>
+      {data?.loans && data.loans.length > 0 && (
+       <div>
       <div className="flex flex-col w-full">
           <div className="flex justify-between w-full p-2">
             <h2 className="text-xl text-content-day font-bold">Current Loan</h2>
@@ -120,7 +227,7 @@ export default function DashBoardPage() {
           </div>
         </div>
         <div></div>
-      </div>
+      </div>)}
     </div>
   )
 }

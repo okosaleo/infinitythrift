@@ -1,6 +1,8 @@
 
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ArchiveRestore, Download,  EllipsisVerticalIcon, ListFilter, Plus, Search } from "lucide-react";
+import Thrift from "./Thrift";
 
 
 export default function ThriftPage() {
@@ -20,53 +22,38 @@ export default function ThriftPage() {
             <div className="flex lg:flex-row flex-col gap-4 w-full">
             <div className="lg:w-2/5 w-full border-[1px] hover:border-content-day border-outline-day flex flex-col gap-1 rounded-md shadow-md mt-20 px-4 py-3">
                 <div className="flex justify-between">
-                    <p className="text-sm text-content-day ">October</p>
+                    <p className="text-sm text-content-day ">Thrift Plan</p>
                     <EllipsisVerticalIcon className="size-7 text-content-day cursor-pointer" />
                 </div>
-                <div><p className="text-xl text-content-day font-bold">&#8358;24,000.00</p></div>
+                <div><p className="text-xl text-content-day font-bold">&#8358;0</p></div>
                 <div className="flex justify-between items-center">
                     <p className="text-sm text-content-day">My Interets</p>
-                    <p className="text-positive-day font-bold">&#8358;4,000.00</p>
+                    <p className="text-positive-day font-bold">&#8358;0</p>
                 </div>
                 <div className="flex justify-between items-center">
                     <p className="text-sm text-content-day">Progress</p>
-                    <p className="text-primary-day font-bold">9.7%</p>
+                    <p className="text-primary-day font-bold">0</p>
                 </div>
+                <Dialog>
                 <div className="w-full flex gap-2">
-                    <Button className="flex items-center flex-row gap-2 w-1/2">
+                    <DialogTrigger className="w-full">
+                    <Button className="flex items-center flex-row gap-2 w-full">
                         <Plus className="size-5 text-text-button" />
                         <p className="text-[13px] text-text-button">Save Money</p>
                     </Button>
-                    <Button className="bg-text-button hover:bg-active-nav border-outline-day border-[1.3px] flex items-center flex-row gap-2 w-1/2">
+                    </DialogTrigger>
+                    <Button className="bg-text-button hover:bg-active-nav border-outline-day border-[1.3px] flex items-center flex-row gap-2 w-full">
                         <ArchiveRestore className="size-5 text-content-day" />
                         <p className="text-[13px] text-content-day">Withdraw</p>
                     </Button>
                 </div>
-            </div>
-            <div className="lg:w-2/5 w-full border-[1px] hover:border-content-day border-outline-day flex flex-col gap-1 rounded-md shadow-md mt-20 px-4 py-3">
-                <div className="flex justify-between">
-                    <p className="text-sm text-content-day ">October</p>
-                    <EllipsisVerticalIcon className="size-7 text-content-day cursor-pointer" />
-                </div>
-                <div><p className="text-xl text-content-day font-bold">&#8358;4,000,000.00</p></div>
-                <div className="flex justify-between items-center">
-                    <p className="text-sm text-content-day">My Interets</p>
-                    <p className="text-positive-day font-bold">&#8358;1,270,000.00</p>
-                </div>
-                <div className="flex justify-between items-center">
-                    <p className="text-sm text-content-day">Progress</p>
-                    <p className="text-primary-day font-bold">2.7%</p>
-                </div>
-                <div className="w-full flex gap-2">
-                    <Button className="flex items-center flex-row gap-2 w-1/2">
-                        <Plus className="size-5 text-text-button" />
-                        <p className="text-[13px] text-text-button">Save Money</p>
-                    </Button>
-                    <Button className="bg-text-button hover:bg-active-nav border-outline-day border-[1.3px] flex items-center flex-row gap-2 w-1/2">
-                        <ArchiveRestore className="size-5 text-content-day" />
-                        <p className="text-[13px] text-content-day">Withdraw</p>
-                    </Button>
-                </div>
+                <DialogContent className="border-primary-day">
+                    <DialogHeader className="flex items-center justify-center">
+                        <DialogTitle>Enter Savings Details</DialogTitle>
+                    </DialogHeader>
+                    <Thrift />
+                </DialogContent>
+                </Dialog>
             </div>
             </div>
             <div className="flex justify-start items-start w-1/5 mt-10">
