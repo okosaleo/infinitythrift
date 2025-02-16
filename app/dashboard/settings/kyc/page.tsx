@@ -48,7 +48,7 @@ export default async function KYCpage() {
       </div><div className="border-b-[1px] border-b-outline-day h-10 w-full flex items-center gap-2 px-4">
        <h1 className="text-sm font-semi-bold text-content-day ml-3">Settings / KYC /</h1>
       </div>
-      {!data?.kyc || data?.kyc?.status === "REJECTED" (
+      {(!data?.kyc || data?.kyc?.status === "REJECTED") && (
       <Dialog>
       <div className="w-full flex items-center justify-center h-[70vh] flex-col gap-2 p-5">
         <div className="h-14 w-14 rounded-full bg-[#f7f8f8] flex items-center justify-center">
