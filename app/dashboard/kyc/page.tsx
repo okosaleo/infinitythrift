@@ -11,9 +11,10 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 
 
+
 export default function KYC() {
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedState, setSelectedState] = useState('');
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedState, setSelectedState] = useState<StateKey | "">("");
   const [selectedCity, setSelectedCity] = useState('');
   const [step, setStep] = useState(1);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -59,6 +60,8 @@ export default function KYC() {
     'Zamfara': ['Gusau', 'Kaura Namoda', 'Tsafe', 'Anka', 'Talata Mafara']
   };
 
+  type StateKey = keyof typeof stateCities;
+
   const handleNext = () => {
     if (step < 4) {
       setStep(step + 1);
@@ -74,8 +77,8 @@ export default function KYC() {
     }
   };
 
-  const handleStateChange = (e) => {
-    setSelectedState(e.target.value);
+  const handleStateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedState(e.target.value as keyof typeof stateCities);
     setSelectedCity(''); // Reset city when state changes
   };
 
@@ -239,8 +242,8 @@ export default function KYC() {
                   <SelectLabel>Document Type</SelectLabel>
                   <SelectItem value="National Id">National ID</SelectItem>
                   <SelectItem value="Passport">Passport</SelectItem>
-                  <SelectItem value="Voters card">Voter's Card</SelectItem>
-                  <SelectItem value="License">Driver's License</SelectItem>
+                  <SelectItem value="Voters card">Voter&apos;s Card</SelectItem>
+                  <SelectItem value="License">Driver&apos;s License</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
