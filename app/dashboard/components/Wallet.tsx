@@ -1,21 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import Image from "next/image";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { PaystackConsumer } from "react-paystack";
 import { unstable_noStore as noStore } from "next/cache";
-import { mutate } from "swr";
+import { updateWalletAction } from "@/actions/updateWallet";
 
 interface iAppProps {
   email: string | undefined;
 }
 
-export default function WalletPage({ email}: iAppProps) {
+export default function WalletPage({ email }: iAppProps) {
   noStore();
   const [nairaAmount, setNairaAmount] = useState("");
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   // Redirect if not logged in
   if (!email) {
@@ -30,27 +32,16 @@ export default function WalletPage({ email}: iAppProps) {
   // This function is called when the payment is successful
   const handleSuccess = (reference: any) => {
     console.log("Payment successful with reference:", reference);
-
-    // Call backend API to update wallet balance
-    fetch("/api/updateWallet", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        amount: parseFloat(nairaAmount),
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Wallet updated successfully:", data);
-        // Manually revalidate SWR data for /api/getWallet so that the UI updates immediately
-        mutate("/api/getWallet");
-      })
-      .catch((error) => {
-        console.error("Error updating wallet:", error);
-      });
+    // Use the amount from state and call the server action within a transition
+    startTransition(async () => {
+      try {
+        await updateWalletAction(parseFloat(nairaAmount));
+        // Refresh the UI to show the updated wallet balance
+        router.refresh();
+      } catch (error: any) {
+        console.error("Error updating wallet:", error.message);
+      }
+    });
   };
 
   // Called when the Paystack dialog is closed without completion
@@ -115,4 +106,5 @@ export default function WalletPage({ email}: iAppProps) {
     </div>
   );
 }
+
 
