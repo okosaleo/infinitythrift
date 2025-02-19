@@ -2,7 +2,7 @@ import { betterFetch } from "@better-fetch/fetch";
 import { NextResponse, type NextRequest } from "next/server";
 import type { Session } from "@/auth";
 
-const publicRoutes = ["/", "/about", "/contact", "/faq", "/public/img", "/services", "/admin/sign-in", "/admin/forgot-password", "/admin/reset-password"];
+const publicRoutes = ["/", "/about", "/contact", "/faq", "/public/img", "/api/updateWallet", "/services", "/admin/sign-in", "/forgot-password", "/reset-password", "/admin/forgot-password", "/admin/reset-password"];
 const authRoutes = ["/sign-in", "/sign-up",];
 const passwordRoutes = ["/reset-password", "/forgot-password"];
 const adminRoutes = ["/admin", "/admin/dashboard"];
@@ -47,5 +47,7 @@ export default async function authMiddleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+  matcher: [
+    '/((?!_next/static|_next/image|_next/data|favicon.ico).*)'
+  ],
 };
