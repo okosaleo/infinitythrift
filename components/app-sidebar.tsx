@@ -92,13 +92,6 @@ const toggleMenu = () => {
                             <CollapsibleContent>
                             <SidebarMenuButton asChild>
                                 <Link href="/dashboard/savings/categories" className="flex items-center gap-4">
-                                <span className="text-base font-medium text-content2-day">Categories / Cycles</span>
-                                </Link>
-                            </SidebarMenuButton>
-                            </CollapsibleContent>
-                            <CollapsibleContent>
-                            <SidebarMenuButton asChild>
-                                <Link href="/dashboard" className="flex items-center gap-4">
                                 <span className="text-base font-medium text-content2-day">Structured Savings</span>
                                 </Link>
                             </SidebarMenuButton>

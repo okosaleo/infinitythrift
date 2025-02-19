@@ -9,7 +9,7 @@ export default function Loanpage() {
     <h1 className="text-2xl font-semi-bold text-content-day">Loans</h1>
 </div>
 <div className="flex justify-center items-center p-2">
-  <div className="bg-active-nav w-[78vh] border-outline-day border justify-evenly p-1 flex items-center gap-2">
+  <div className="bg-active-nav w-[92vh] border-outline-day border justify-evenly p-1 flex items-center gap-2">
     <div>
     <Info className="size-7 text-icon-day" />
     </div>

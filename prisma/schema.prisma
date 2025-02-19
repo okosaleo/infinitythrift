@@ -190,24 +190,34 @@ model Wallet {
 }
 
 model Transaction {
-  id           String            @id @default(cuid())
-  userId       String
-  user         User              @relation(fields: [userId], references: [id])
-  amount       Decimal
-  type         TransactionType
-  status       TransactionStatus @default(PENDING)
-  reference    String?           @unique
-  description  String?
-  metadata     Json?
-  loanId       String?
-  savingsId    String?
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
+  id                String                  @id @default(cuid())
+  userId            String
+  user              User                    @relation(fields: [userId], references: [id])
+  amount            Decimal
+  type              TransactionType         // e.g., LOAN_DISBURSEMENT, SAVINGS_DEPOSIT, etc.
+  status            TransactionStatus       @default(PENDING)
+  reference         String?                 @unique
+  description       String?
+  metadata          Json?
+  
+  // New fields to capture fund flow details:
+  sourceType        TransactionSourceType?  
+  sourceId          String?                 // ID of the source account (loan, wallet, savings, etc.)
+  destinationType   TransactionDestinationType?
+  destinationId     String?                 // ID of the destination account
+  
+  // Existing optional references (if needed for backward compatibility)
+  loanId            String?
+  savingsId         String?
+  
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
 
   @@index([userId])
   @@index([type])
   @@index([createdAt])
 }
+
 
 model LoanRequest {
   id           String             @id @default(cuid())
@@ -335,4 +345,20 @@ enum KYCStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+enum TransactionSourceType {
+  LOAN
+  WALLET
+  THRIFT_SAVINGS
+  CATEGORY_SAVINGS
+  STRUCTURED_SAVINGS
+}
+
+enum TransactionDestinationType {
+  LOAN
+  WALLET
+  THRIFT_SAVINGS
+  CATEGORY_SAVINGS
+  STRUCTURED_SAVINGS
 }

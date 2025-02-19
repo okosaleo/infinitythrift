@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { SelectValue } from "@radix-ui/react-select";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import { UploadDropzone } from "@/lib/uploadthing";
 
 
 
@@ -92,28 +93,25 @@ export default function KYC() {
             )}
        </DialogHeader>
       {step === 1 && ( 
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-center mt-[-19px]">
-        <p>1/4</p>
-        </div>
+      <div className="flex flex-col gap-2 mt-[-24px]">
         <div className="text-content2-day flex gap-5">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
                 <Label>First name</Label>
                 <Input />
             </div>
-            <div className="flex gap-2 flex-col">
+            <div className="flex gap-1 flex-col">
             <Label>Last name</Label>
             <Input />
         </div>
         </div>
-        <div className="w-full  text-content2-day flex gap-2 flex-col">
+        <div className="w-full  text-content2-day flex gap-[0.5px] flex-col">
             <Label>Date of Birth</Label>
-         <div className="flex border-[0.8px] p-2 rounded-md items-center border-input w-full">
+         <div className="flex border-[0.8px] p-1 rounded-md items-center border-input w-full">
             <DatePicker date={selectedDate} setDate={setSelectedDate} />
             <CalendarIcon className="size-5 text-icon-day" />
       </div>
         </div>
-        <div>
+        <div className="text-content2-day">
           <Label>Gender</Label>
           <Select>
             <SelectTrigger>
@@ -128,8 +126,8 @@ export default function KYC() {
       </SelectContent>
           </Select>
         </div>
-        <div>
-        <div className="flex flex-col gap-2">
+        <div className="text-content2-day">
+        <div className="flex flex-col gap-1">
                 <Label>Address</Label>
                 <Input placeholder="Enter Address" />
             </div>
@@ -139,14 +137,14 @@ export default function KYC() {
       <div className="flex gap-5">
         {/* State Selector */}
         <div className="flex-1">
-          <Label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-2">
+          <Label htmlFor="state" className="block text-sm font-medium text-gray-700">
             State
           </Label>
           <select
             id="state"
             value={selectedState}
             onChange={handleStateChange}
-            className="w-full p-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-1 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Select State</option>
             {Object.keys(stateCities).map((state) => (
@@ -157,7 +155,7 @@ export default function KYC() {
 
         {/* City Selector - Always Visible */}
         <div className="flex-1">
-          <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="city" className="block text-sm font-medium text-gray-700">
             City
           </label>
           <select
@@ -165,7 +163,7 @@ export default function KYC() {
             value={selectedCity}
             onChange={(e) => setSelectedCity(e.target.value)}
             disabled={!selectedState}
-            className="w-full p-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="w-full p-1 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
           >
             <option value="">{selectedState ? "Select City" : "Select State First"}</option>
             {selectedState && stateCities[selectedState].map((city) => (
@@ -178,7 +176,7 @@ export default function KYC() {
 
     
     </div>
-    <div>
+    <div className="text-content2-day">
     <Label>proof of address type</Label>
           <Select>
             <SelectTrigger>
@@ -195,13 +193,20 @@ export default function KYC() {
       </SelectContent>
           </Select>
     </div>
+
+    <div>
+      <Label>Upload Proof of Address</Label>
+      <UploadDropzone className="h-[10vh] border-primary-day bg-active-nav ut-label:text-primary-day"
+       endpoint="imageUploader"
+        />
+    </div>
     <DialogTrigger asChild>
     <Button onClick={handleNext}>Next</Button>
     </DialogTrigger>
     </div>   )}
 
     {step === 2 && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
              <div className="flex items-center justify-center mt-[-19px]">
         <p>2/4</p>
         </div>
@@ -228,11 +233,11 @@ export default function KYC() {
 
 {step === 3 && (
           <div className="flex flex-col gap-4">
-             <div className="flex items-center justify-center mt-[-19px]">
+             <div className="flex items-center justify-center mt-[-29px]">
         <p>3/4</p>
         </div>
         <div className="flex flex-col gap-2">
-        <Label>Proof of Address Type</Label>
+        <Label className="text-content2-day">Issued ID Type</Label>
             <Select>
               <SelectTrigger>
                 <SelectValue placeholder="Select ID type" />
@@ -247,10 +252,29 @@ export default function KYC() {
                 </SelectGroup>
               </SelectContent>
             </Select>
+
+            <div className="text-content2-day"> 
+      <Label>ID Upload</Label>
+      <div className="flex flex-col gap-[0.7px]">
+      <p className="text-sm">If uploading ensure that:</p>
+      <p className="text-[12px]">The entire ID is visible.</p>
+      <p className="text-[12px]">It is done in a well lit room</p>
+      </div>
+      <UploadDropzone className="h-[15vh] border-primary-day bg-active-nav ut-label:text-primary-day"
+       endpoint="imageUploader"
+        />
+    </div>
             <div className="flex flex-col gap-2 mt-2 text-content2-day">
             <Label>Identification Number</Label>
             <Input placeholder="Enter Number" />
             </div>
+
+            <div className="text-content2-day"> 
+      <Label>Upload a Selfie with your chosen ID</Label>
+      <UploadDropzone className="h-[15vh] border-primary-day bg-active-nav ut-label:text-primary-day"
+       endpoint="imageUploader"
+        />
+    </div>
         </div>
             <Button onClick={handleNext}>Next</Button>
           </div>
@@ -260,9 +284,18 @@ export default function KYC() {
           <div className="flex flex-col gap-4">
            <div className="flex items-center justify-center mt-[-19px]">
            <p>4/4</p></div>
+           <div className="text-content2-day"> 
+      <Label>Upload Photo</Label>
+      <div className="flex flex-col gap-[0.7px]">
+      <p className="text-[13px]">Your fce must be clearly visible</p>
+      </div>
+      <UploadDropzone className="h-[15vh] border-primary-day bg-active-nav ut-label:text-primary-day"
+       endpoint="imageUploader"
+        />
+    </div>
            <div className="flex flex-col gap-2 mt-2 text-content2-day">
             <Label>Signature</Label>
-            <Input placeholder="Enter Number" />
+            <Input placeholder="Enter Full Name" />
             <p className="text-[12px]">Write your full government name in all caps</p>
             </div>
             <Button onClick={handleNext}>Submit KYC</Button>

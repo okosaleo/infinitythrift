@@ -13,6 +13,7 @@ import {
 import SignoutButton from "./sign-out";
 import { Copy, LockKeyhole } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
 
 interface iAppProps {
   refid: string | undefined;
@@ -68,12 +69,12 @@ export function UserNav({ refid, name }: iAppProps) {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <div className="flex-row flex gap-2 items-start ">
+          <Link href="/forgot-password" className="flex-row flex gap-2 items-start ">
             <div className="cursor-pointer"><LockKeyhole className="size-5 text-content-day" /></div>
             <div className=" text-content-day">
               <p className="leading-none text-sm  font-medium">Change Password</p>
             </div>
-          </div>
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
