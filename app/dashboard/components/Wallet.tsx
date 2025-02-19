@@ -5,9 +5,13 @@ import { Plus } from "lucide-react";
 import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { PaystackConsumer } from "react-paystack";
 import { unstable_noStore as noStore } from "next/cache";
 import { updateWalletAction } from "@/actions/updateWallet";
+import dynamic from "next/dynamic";
+const PaystackConsumer = dynamic(
+  () => import("react-paystack").then((mod) => mod.PaystackConsumer),
+  { ssr: false }
+);
 
 interface iAppProps {
   email: string | undefined;
