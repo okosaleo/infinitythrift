@@ -103,7 +103,7 @@ export default async function DashBoardPage() {
               </div>
             </div>
             <div className="w-full">
-              <WalletPage email={data?.email} userId={data?.id} />
+              <WalletPage email={data?.email} />
             </div>
           </div>
           <div className="bg-gradient-to-br from-content-day from-15% to-hover-btn lg:w-1/4 w-full h-32 rounded-md flex-col flex justify-between p-5">
