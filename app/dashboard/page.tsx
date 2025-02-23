@@ -36,11 +36,6 @@ export default async function DashBoardPage() {
 
   const userId = session.user.id;
   const data = await getData(userId);
-
-  const serializedTransactions = data.transactions?.map(transaction => ({
-    ...transaction,
-    amount: transaction.amount.toNumber(), // ✅ Convert Decimal to Number
-  })) || [];
   
 
   const thriftSavingsBalance =
@@ -209,7 +204,7 @@ const loanBalance =
             <button className="p-2 bg-light-overlay rounded-2xl">See All</button>
           </div>
           {data?.transactions.length ? (
-            <Transactions transactions={serializedTransactions} />
+            <Transactions transactions={data.transactions} />
           ) : (
             <div className="flex flex-col gap-2 justify-center items-center h-[40vh]">
               <div className="flex items-center justify-center w-14 h-14 rounded-full bg-outline-day">
