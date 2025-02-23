@@ -18,7 +18,6 @@ import { ThriftSavingsSchema } from "./lib/zodSchemas";
         const rawData = {
             category: formData.get('category'),
             dailyAmount: Number(formData.get('dailyAmount')),
-            description: formData.get('description')
           };
       
           // Zod validation
@@ -34,7 +33,6 @@ import { ThriftSavingsSchema } from "./lib/zodSchemas";
               category: validatedData.category,
               dailyAmount: validatedData.dailyAmount,
               currentAmount: 0,
-              description: validatedData.description,
               trackers: {
                 create: [{
                   weekStart: new Date(),
