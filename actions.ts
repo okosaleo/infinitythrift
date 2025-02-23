@@ -12,7 +12,7 @@ import { ThriftSavingsSchema } from "./lib/zodSchemas";
         if (!session) {
           throw new Error("Unauthorized");
         }
-        const user = session.user;
+        const user = session.user
         if (!user) throw new Error("Unauthorized");
 
         const rawData = {
