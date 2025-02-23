@@ -285,12 +285,12 @@ export default function KYC() {
                       className="w-full p-1 border border-input rounded-md"
                     >
                       <option value="">{selectedState ? "Select City" : "Select State First"}</option>
-                      {selectedState &&
-                        stateCities[selectedState].map((city) => (
-                          <option key={city} value={city}>
-                            {city}
-                          </option>
-                        ))}
+                 {selectedState &&
+                      stateCities[selectedState as keyof typeof stateCities].map((city) => (
+                   <option key={city} value={city}>
+                      {city}
+                      </option>
+                         ))}
                     </select>
                   )}
                 />
