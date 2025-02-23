@@ -11,7 +11,6 @@ import Image from "next/image";
 import { useState } from "react";
 import { signUpSchema } from "@/lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { authClient } from "@/auth-client";
 import {
   Form,
   FormControl,
@@ -30,7 +29,6 @@ export default function SignUp() {
   const [pending, setPending] = useState(false);
   const { toast } = useToast();
 
-  // Note: Make sure the defaultValues keys match your schema exactly.
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -38,41 +36,42 @@ export default function SignUp() {
       email: "",
       password: "",
       confirmPassword: "",
-      referralCode: "", // Ensure this key matches the schema
+      referralCode: "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
-    await authClient.signUp.email(
-      {
-        email: values.email,
-        password: values.password,
-        name: values.name,
-      },
-      {
-        onRequest: () => {
-          setPending(true);
+    setPending(true);
+    try {
+      const response = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        onSuccess: () => {
-          toast({
-            title: "Account created",
-            description:
-              "Your account has been created. Check your email for a verification link.",
-          });
-        },
-        onError: (ctx) => {
-          console.log("error", ctx);
-          toast({
-            title: "Something went wrong",
-            description: ctx.error.message ?? "Something went wrong.",
-          });
-        },
+        body: JSON.stringify(values),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        toast({
+          title: "Account created",
+          description: "Your account has been created. Check your email for a verification link.",
+        });
+        // Optionally, redirect the user after sign up
+      } else {
+        toast({
+          title: "Something went wrong",
+          description: result.error || "An error occurred during sign up.",
+        });
       }
-    );
+    } catch (error: any) {
+      toast({
+        title: "Something went wrong",
+        description: error.message || "An error occurred during sign up.",
+      });
+    }
     setPending(false);
   };
 
-  // Array of field configurations; keys match your zod schema exactly.
   const fields = [
     { name: "name", label: "Name", type: "text", placeholder: "Enter your name" },
     { name: "email", label: "Email", type: "email", placeholder: "Enter your email" },
@@ -115,30 +114,23 @@ export default function SignUp() {
                           autoComplete="off"
                         />
                       </FormControl>
-                      {/* FormMessage will display any error from the zod schema */}
                       <FormMessage className="text-[11px]">{error?.message}</FormMessage>
                     </FormItem>
                   )}
                 />
               ))}
-              <div className="flex flex-col ">
+              <div className="flex flex-col">
                 <div className="flex items-center md:justify-center justify-start text-[13px] mt-2 text-primary-day">
                   <Link href="/sign-in">Already have an account? Sign in.</Link>
                 </div>
               </div>
               {pending ? (
-                <Button
-                  disabled
-                  className="text-text-button  bg-primary-day w-full hover:bg-hover-btn"
-                >
+                <Button disabled className="text-text-button bg-primary-day w-full hover:bg-hover-btn">
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Please Wait
                 </Button>
               ) : (
-                <Button
-                  type="submit"
-                  className="text-text-button mt-4 bg-primary-day w-full hover:bg-hover-btn"
-                >
+                <Button type="submit" className="text-text-button mt-4 bg-primary-day w-full hover:bg-hover-btn">
                   Sign Up
                 </Button>
               )}
@@ -149,5 +141,6 @@ export default function SignUp() {
     </div>
   );
 }
+
 
 

@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { Dialog } from "@/components/ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { prisma } from "@/lib/prisma";
 import { ArrowLeft, Ban, ChartNetwork, ChevronRight, CircleCheck, CircleX, Clock, EllipsisVertical, UserPen } from "lucide-react";
@@ -53,15 +54,7 @@ export default async function Profilepage() {
                     <p className="text-xl font-medium">{data?.name}</p>
                    </div>
                </div>
-               {data?.kyc?.status === "PENDING" || "REJECTED" ? (
-                  <Link href='/dashboard/settings/kyc'>
-                <div className="flex gap-2 items-center bottom-0">
-                <CircleX className="text-destructive" />
-                <p className="text-[12px] text-destructive">Not Verified</p>
-                <ChevronRight className="size-4" />
-               </div>
-               </Link>
-               ) : (
+               {data?.kyc?.kycstatus === "APPROVED" ? (
                 <Link href='/dashboard/settings/kyc'>
                <div className="flex gap-2 items-center bottom-0">
                         <CircleCheck className="text-positive-day" />
@@ -69,8 +62,17 @@ export default async function Profilepage() {
                         <ChevronRight className="size-4" />
             </div>
             </Link>
+               ) : (
+             <Link href='/dashboard/settings/kyc'>
+             <div className="flex gap-2 items-center bottom-0">
+             <CircleX className="text-destructive" />
+             <p className="text-[12px] text-destructive">Not Verified</p>
+             <ChevronRight className="size-4" />
+            </div>
+            </Link>
             )}
           </div>
+          <Dialog>
           <Popover>
             <PopoverTrigger>
             <button className="bg-[#efefef] h-9 w-9 rounded-full flex items-center justify-center">
@@ -78,25 +80,23 @@ export default async function Profilepage() {
             </button>
             </PopoverTrigger>
             <PopoverContent className="flex gap-2 flex-col w-48 mr-4">
-                <button className="flex items-center gap-3">
+                <Link href="/dashboard/settings/profile/edit-profile" className="flex items-center gap-3">
                     <UserPen className="text-content-day size-4" />
                     <p>Edit Profile</p>
-                </button>
-                <button className="flex items-center gap-3">
-                    <Clock className="text-content-day size-4" />
-                    <p>Activity</p>
-                </button>
-                <button className="flex items-center gap-3">
+                </Link>
+                <Link href="/dashboard/settings/profile/referral-list" className="flex items-center gap-3">
                     <ChartNetwork className="text-content-day size-4" />
                     <p>View Referral List</p>
-                </button>
-                <button className="flex items-center gap-3">
+                </Link>
+                <Link href="/dashboard/settings/profile/deactivate" className="flex items-center gap-3">
                     <Ban className="text-destructive-day size-4" />
                     <p className="text-destructive-day">Deactivate</p>
-                </button>
+                </Link>
             </PopoverContent>
             </Popover>
+            </Dialog>
         </div>
+        
           {/* second part*/}
         <div className="flex flex-col gap-1 ">
             <p className="font-semibold">Contact</p>
@@ -107,7 +107,7 @@ export default async function Profilepage() {
                 </div>
                 <div className="flex flex-col gap-1">
                 <h4 className="font-medium">Phone Number</h4>
-                <p>{data?.kyc?.number || <p>N/A</p>}</p>
+                <p>{data?.kyc?.phoneNumber || <p>N/A</p>}</p>
                 </div>
                 <div className="flex flex-col gap-1">
                 <h4 className="font-medium">Email Address</h4>

@@ -14,7 +14,7 @@ export default function Home() {
   return (
   <div className="flex flex-col relative">
     <MainNav />
-    <div className="bg-[url(https://utfs.io/f/mLASHSxEsNLihVsDdeCgm20yVCtcXJGL6Wjv1nb7hHPQiokB/img/bgim.jpeg')] lg:bg-[length:100vw_100vh] bg-[length:100vw_80vh]  bg-center w-full lg:h-[80vh] h-[50vh] relative">
+    <div className="bg-[url('/img/mij.jpeg')] lg:bg-[length:100vw_100vh] bg-[length:100vw_80vh]  bg-center w-full lg:h-[80vh] h-[50vh] relative">
     <div className="absolute z-10 bg-[#55371bcb] w-full lg:h-[80vh] h-[50vh]">
       <div className="justify-center flex mt-9 flex-col items-center gap-4">
         <div className="md:text-5xl text-2xl text-text-button font-bold">

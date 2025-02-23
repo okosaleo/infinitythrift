@@ -1,7 +1,7 @@
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { prisma } from "@/lib/prisma";
-import { Ban, Banknote, CalendarCheck, ChevronRight, CircleAlert, EllipsisVertical, HandCoins, Wallet } from "lucide-react";
+import { Ban, Banknote, CalendarCheck, CheckCircle2, ChevronRight, CircleAlert, EllipsisVertical, GitMerge, HandCoins, Wallet } from "lucide-react";
 import Link from "next/link";
 
 
@@ -48,7 +48,13 @@ export default async function ProfilePage({params}: { params: Promise<{ userId: 
             <DropdownMenuItem>
                 <div className='flex flex-row gap-2 items-center'>
                     <Wallet className='size-4' />
-                    <Link href="/admin/dashboard/members">Refund Wallet</Link>
+                    <Link href={`/admin/dashboard/members/profile/wallet/${data?.id}`}>Refund Wallet</Link>
+                  </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <div className='flex flex-row gap-2 items-center'>
+                    <GitMerge className='size-4' />
+                    <Link href="/admin/dashboard/members">View Referee List</Link>
                   </div>
               </DropdownMenuItem>
               <DropdownMenuItem>
@@ -63,11 +69,19 @@ export default async function ProfilePage({params}: { params: Promise<{ userId: 
         <div className="flex flex-col gap-2 justify-center items-center mt-8 w-[97%] ">
           <div className="flex items-center gap-2">
           <p className="text-2xl">{data?.name}</p>
-          <div className="text-destructive-day flex gap-2 items-center"><CircleAlert /> {data?.kyc?.status === "PENDING" || "REJCTED" ? (<p className="text-sm text-destructive-day">not verified</p>) : (<p className="text-sm text-positive-day">verified</p>)}</div>
+          {data?.kyc?.kycstatus === "APPROVED" ? (
+            <div className="flex items-center gap-2">
+            <CheckCircle2 className="size-5 text-positive-day" />
+    <p className="text-sm text-positive-day">Verified</p>
+    </div>
+  ) : (
+    <div className="flex items-center gap-2">
+      <CircleAlert className="size-5 text-destructive-day" />
+    <p className="text-sm text-destructive-day">Not verified</p>
+    </div>
+  )}
           </div>
-          <p className="text-sm">Signed up: {new Date(data?.createdAt
-      ? new Date(data.createdAt).toLocaleDateString("en-GB")
-      : "Unknown").toLocaleDateString('en-GB')}</p>
+          <p className="text-sm">Signed up: {data?.createdAt.toLocaleString()}</p>
         </div>
         <div className="w-full mt-12 p-5">
         {/* Wallets */}
@@ -135,9 +149,41 @@ export default async function ProfilePage({params}: { params: Promise<{ userId: 
       </div>
 
 
-        <div className="flex flx-col gap-3 mt-14">
-          <div>
-            <p>Contact</p>
+        <div className="flex flex-col gap-3 mt-14">
+          <div className="p-4">
+            <p className="text-xl font-medium">Contact</p>
+          </div>
+
+          <div className="ml-5 md:block gap-3 flex">
+            <div className="md:grid flex flex-col grid-cols-3 gap-2">
+              <p>Membership ID</p>
+              <p>Phone Number</p>
+              <p>Email Address</p>
+            </div>
+            <div className="md:grid flex flex-col grid-cols-3 gap-2">
+              <p>{data?.kyc?.userId.slice(0, 8)}</p>
+              <p>{data?.kyc?.phoneNumber || "N/A"}</p>
+              <p>{data?.email}</p>
+            </div>
+          </div>
+
+          <h2 className="ml-5 text-xl font-medium">Identification</h2>
+          <div className="ml-5 md:block gap-3 flex">
+            <div className="md:grid flex flex-col grid-cols-4 gap-1">
+              <p>Date Of Birth</p>
+              <p>Gender</p>
+              <p>Address</p>
+              <p>KYC Verification</p>
+            </div>
+            <div className="md:grid flex flex-col grid-cols-4 gap-1">
+              <p>{data?.kyc?.dob.toLocaleDateString() || "N/A"}</p>
+              <p>{data?.kyc?.gender || "N/A"}</p>
+              <p>{data?.kyc?.address}</p>
+              <Link href={`/admin/dashboard/members/profile/kyc/${data?.id}`} className="text-primary-active w-[140px] flex gap-2 items-center">
+                <p>View</p>
+                <ChevronRight className="size-4 text-icon-day" />
+              </Link>
+            </div>
           </div>
           <div>
             

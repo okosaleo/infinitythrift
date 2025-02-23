@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, DoorOpen, EllipsisVertical, SquarePen, } from "lucide-react";
 import Link from "next/link";
+import Passwordchange from "./password-change";
 
 
 export default function Profilepage() {
@@ -152,21 +153,7 @@ export default function Profilepage() {
     </div>
     </div>
     {/* second part*/}
-    <div className="w-full p-7">
-       <div className="w-full p-7 bg-[#f7f8f8] flex flex-col gap-10 lg:h-[40vh] h-fit rounded-sm">
-       <div className="flex flex-col gap-3">
-                <h2 className="text-xl font-medium">Account Settings</h2>
-                <p className="text-[12px] text-content2-day ">Change account settings like password etc.</p>
-            </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2/5">
-            <Label>Password</Label>
-            <Input type="password" />
-            </div>
-            <Button className="mt-6">Change Password</Button>
-          </div>
-       </div>
-    </div>
+    <Passwordchange />
     </div>
   )
 }

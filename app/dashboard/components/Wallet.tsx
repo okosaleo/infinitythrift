@@ -5,13 +5,9 @@ import { Plus } from "lucide-react";
 import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
+import { PaystackConsumer } from "react-paystack";
 import { unstable_noStore as noStore } from "next/cache";
 import { updateWalletAction } from "@/actions/updateWallet";
-import dynamic from "next/dynamic";
-const PaystackConsumer = dynamic(
-  () => import("react-paystack").then((mod) => mod.PaystackConsumer),
-  { ssr: false }
-);
 
 interface iAppProps {
   email: string | undefined;
@@ -39,7 +35,12 @@ export default function WalletPage({ email }: iAppProps) {
     // Use the amount from state and call the server action within a transition
     startTransition(async () => {
       try {
-        await updateWalletAction(parseFloat(nairaAmount));
+        const amount = parseFloat(nairaAmount);
+        if (isNaN(amount) || amount <= 0) {
+          console.error("Invalid deposit amount:", nairaAmount);
+          return;
+        }
+        await updateWalletAction(amount);
         // Refresh the UI to show the updated wallet balance
         router.refresh();
       } catch (error: any) {
@@ -92,10 +93,15 @@ export default function WalletPage({ email }: iAppProps) {
                 <button
                   className="bg-active-nav flex items-center justify-center w-full p-2 border border-primary-day rounded-md"
                   onClick={() => {
-                    if (nairaAmount && parseFloat(nairaAmount) > 0) {
-                      initializePayment(handleSuccess, handleClose);
+                    // Only proceed if the window object is available
+                    if (typeof window !== "undefined") {
+                      if (nairaAmount && parseFloat(nairaAmount) > 0) {
+                        initializePayment(handleSuccess, handleClose);
+                      } else {
+                        alert("Please enter a valid amount in Naira");
+                      }
                     } else {
-                      alert("Please enter a valid amount in Naira");
+                      console.error("Window is not defined, cannot proceed with payment");
                     }
                   }}
                   disabled={!nairaAmount || parseFloat(nairaAmount) <= 0}

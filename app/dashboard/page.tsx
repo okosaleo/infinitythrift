@@ -8,8 +8,8 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import KYC from "./kyc/page";
 import Link from "next/link";
-import WalletPage from "./components/Wallet";
 import WalletBalance from "./components/WalletBalance";
+import Transactions from "./components/Transactions";
 
 const getData = async (userId: string) => {
   const data = await prisma.user.findUnique({
@@ -26,6 +26,8 @@ const getData = async (userId: string) => {
   return data;
 };
 
+
+
 export default async function DashBoardPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
@@ -35,13 +37,20 @@ export default async function DashBoardPage() {
   const userId = session.user.id;
   const data = await getData(userId);
 
-  // Calculate additional balances using the server-fetched data
+  const serializedTransactions = data.transactions?.map(transaction => ({
+    ...transaction,
+    amount: transaction.amount.toNumber(), // ✅ Convert Decimal to Number
+  })) || [];
+  
+
   const thriftSavingsBalance =
-    data?.thriftSavings?.reduce((acc, item) => acc + Number(item.currentAmount), 0) || 0;
-  const structuredSavingsBalance =
-    data?.structuredSavings?.reduce((acc, item) => acc + Number(item.currentAmount), 0) || 0;
-  const loanBalance =
-    data?.loans?.reduce((acc, loan) => acc + (Number(loan.amountDue) - Number(loan.amountPaid)), 0) || 0;
+  data?.thriftSavings?.reduce((acc, item) => acc + (item.currentAmount?.toNumber?.() || 0), 0) || 0;
+
+const structuredSavingsBalance =
+  data?.structuredSavings?.reduce((acc, item) => acc + (item.currentAmount?.toNumber?.() || 0), 0) || 0;
+
+const loanBalance =
+  data?.loans?.reduce((acc, loan) => acc + ((loan.amountDue?.toNumber?.() || 0) - (loan.amountPaid?.toNumber?.() || 0)), 0) || 0;
 
   // Formatter for Nigerian Naira
   const formatCurrency = (amount: number) =>
@@ -50,7 +59,7 @@ export default async function DashBoardPage() {
   return (
     <div className="flex flex-col w-full p-4 gap-12">
       {/* Verification */}
-      {!data?.kyc && (
+      {!data?.kyc || data.kyc.kycstatus === "REJECTED" && (
         <Dialog>
           <div className="flex items-center justify-center">
             <div className="border-[1px] border-[#db2222] rounded-sm lg:w-2/3 w-full h-12 flex justify-between items-center bg-[#fee9e8]">
@@ -77,7 +86,6 @@ export default async function DashBoardPage() {
           <DialogContent className="border-primary-day">
             <DialogHeader className="flex items-center justify-between mt-[-7px]">
               <DialogTitle className="text-content-day text-base">Complete KYC</DialogTitle>
-              <DialogTitle className="text-content2-day text-[12px] font-light">Personal Information</DialogTitle>
             </DialogHeader>
             <KYC />
           </DialogContent>
@@ -102,8 +110,10 @@ export default async function DashBoardPage() {
                 <Wallet className="size-5 text-text-button" />
               </div>
             </div>
-            <div className="w-full">
-              <WalletPage email={data?.email} />
+            <div className="w-1/2">
+            <Link href="/dashboard/wallet" className="bg-[#a79e9ea6] text-[12px] p-1 flex items-center w-full rounded-md text-primary-day justify-center">
+            <Plus className="size-4" />Deposit
+          </Link>
             </div>
           </div>
           <div className="bg-gradient-to-br from-content-day from-15% to-hover-btn lg:w-1/4 w-full h-32 rounded-md flex-col flex justify-between p-5">
@@ -119,9 +129,9 @@ export default async function DashBoardPage() {
               </div>
             </div>
             <div className="flex items-start w-full">
-              <button className="bg-[#a79e9ea6] text-[12px] p-1 flex items-center w-1/2 rounded-md text-primary-day justify-center gap-1">
+              <Link href="/dashboard/savings/thrift" className="bg-[#a79e9ea6] text-[12px] p-1 flex items-center w-1/2 rounded-md text-primary-day justify-center gap-1">
                 <Plus className="size-4" />Save Money
-              </button>
+              </Link>
             </div>
           </div>
           <div className="bg-gradient-to-r from-[#a07e13] from-25% to-[#594401] lg:w-1/4 w-full h-32 rounded-md flex-col flex justify-between p-5">
@@ -140,9 +150,9 @@ export default async function DashBoardPage() {
               </div>
             </div>
             <div className="flex items-start w-full">
-              <button className="bg-[#a79e9ea6] text-[12px] p-1 flex items-center w-1/2 rounded-md text-primary-day justify-center gap-1">
+              <Link href="/dashboard/savings/categories" className="bg-[#a79e9ea6] text-[12px] p-1 flex items-center w-1/2 rounded-md text-primary-day justify-center gap-1">
                 <Plus className="size-4" />Add Funds
-              </button>
+              </Link>
             </div>
           </div>
           <div className="bg-gradient-to-r from-[#3e3e3e] to-[black] lg:w-1/4 w-full h-32 rounded-md flex-col flex justify-between p-5">
@@ -161,9 +171,9 @@ export default async function DashBoardPage() {
               <p className="text-[12px] text-text-button">
                 Installment {formatCurrency(0)}
               </p>
-              <button className="bg-text-button text-[11px] p-1 flex items-center w-1/3 rounded-md text-content-day justify-center gap-1">
+              <Link href="/dashboard/loans" className="bg-text-button text-[11px] p-1 flex items-center w-1/3 rounded-md text-content-day justify-center gap-1">
                 Payback
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -199,7 +209,7 @@ export default async function DashBoardPage() {
             <button className="p-2 bg-light-overlay rounded-2xl">See All</button>
           </div>
           {data?.transactions.length ? (
-            <div>theree is</div>
+            <Transactions transactions={serializedTransactions} />
           ) : (
             <div className="flex flex-col gap-2 justify-center items-center h-[40vh]">
               <div className="flex items-center justify-center w-14 h-14 rounded-full bg-outline-day">

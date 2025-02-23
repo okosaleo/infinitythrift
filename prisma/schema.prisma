@@ -26,6 +26,8 @@ model User {
   role          String    @default("user")
   banned        Boolean   @default(false)
   banReason     String?
+  referredBy    String? 
+  lastName      String?
   banExpires    Int? /// Unix timestamp for ban expiration
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -35,8 +37,10 @@ model User {
   categorySavings   CategorySavings[]
   structuredSavings StructuredSavings[]
   loans         Loan[]
+   withdrawalRequests   WithdrawalRequest[]
   loanRequests  LoanRequest[]
   transactions  Transaction[]
+  referrals     Referral[]  
   wallet        Wallet?
   kyc           KYC?
   @@index([id]) 
@@ -112,6 +116,7 @@ model ThriftSavings {
   id           String         @id @default(cuid())
   userId       String
   user         User           @relation(fields: [userId], references: [id])
+  dailyAmount  Decimal 
   category     ThriftCategory
   currentAmount Decimal        @default(0.0)
   trackers      ThriftSavingsTracker[]
@@ -124,6 +129,7 @@ model CategorySavings {
   userId       String
   user         User                @relation(fields: [userId], references: [id])
   category     SavingsCategoryType
+  
   amount       Decimal
   startDate    DateTime
   endDate      DateTime
@@ -209,6 +215,7 @@ model Transaction {
   // Existing optional references (if needed for backward compatibility)
   loanId            String?
   savingsId         String?
+  withdrawalRequest WithdrawalRequest?      @relation("WithdrawalTransaction")
   
   createdAt         DateTime                @default(now())
   updatedAt         DateTime                @updatedAt
@@ -245,11 +252,12 @@ model KYC {
   user            User             @relation(fields: [userId], references: [id])
   firstName       String
   lastName        String
-  number          String
+  phoneNumber     String?
   dob             DateTime
   gender          Gender
   address         String
   state           String
+  signature       String @default("N/A")
   city            String
   proofOfAddress  String  // URL to uploaded document
   occupation      String
@@ -259,8 +267,9 @@ model KYC {
   idType          IdentificationType
   idNumber        String
   idImage         String  // URL to front of ID document
-  idSelfie        String  // URL to selfie with ID document
-  status          KYCStatus       @default(PENDING) 
+  selfie          String
+  idWithSelfie    String  // URL to front of ID document with selfie
+  kycstatus       KYCStatus       @default(PENDING) 
   reviewedBy      String?         // Admin ID who reviewed
   reviewedAt      DateTime?
   rejectionReason String?
@@ -268,9 +277,37 @@ model KYC {
   updatedAt       DateTime        @updatedAt
 
   @@index([userId])
-  @@index([status])
+  @@index([kycstatus])
   @@index([bvn])
   @@index([idNumber])
+}
+
+model WithdrawalRequest {
+  id            String             @id @default(cuid())
+  userId        String
+  user          User               @relation(fields: [userId], references: [id])
+  amount        Decimal
+  bankName      String
+  accountNumber String
+  description   String?
+  status        WithdrawalStatus   @default(PENDING)
+  
+  // Link to the Transaction model (one-to-one relation)
+  transactionId String?            @unique
+  transaction   Transaction?       @relation("WithdrawalTransaction", fields: [transactionId], references: [id])
+  
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+}
+
+model Referral {
+  id                String   @id @default(cuid())
+  // The user who referred the new user
+  referrerId        String
+  referrer          User     @relation(fields: [referrerId], references: [id])
+  // The name of the newly registered user
+  referredUserName  String
+  createdAt         DateTime @default(now())
 }
 
 enum ThriftCategory {
@@ -361,4 +398,11 @@ enum TransactionDestinationType {
   THRIFT_SAVINGS
   CATEGORY_SAVINGS
   STRUCTURED_SAVINGS
+}
+
+
+enum WithdrawalStatus {
+  PENDING
+  COMPLETED
+  FAILED
 }

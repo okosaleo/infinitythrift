@@ -27,7 +27,7 @@ const linknavs = [
         id: 4,
         title: "Account",
         desc: "Deactivate, Delete",
-        url: "/dashboard/settings/account",
+        url: "/dashboard/settings/profile/deactivate",
         icon: CircleUserRound,
     },
 ]

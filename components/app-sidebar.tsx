@@ -1,5 +1,5 @@
 "use client";
-import {  BadgeHelp, Banknote, ChevronDown, HandCoins,  LayoutDashboard, Settings } from "lucide-react"
+import {  BadgeHelp, Banknote, ChevronDown, HandCoins,  LayoutDashboard, Settings, Wallet } from "lucide-react"
 
 import {
   Sidebar,
@@ -104,6 +104,14 @@ const toggleMenu = () => {
                                 <Link href="/dashboard/loans" className="flex items-center gap-4">
                                 <Banknote  className="size-4 text-content2-day"/>
                                 <span className="text-base font-medium text-content2-day">Loans</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton asChild>
+                                <Link href="/dashboard/wallet" className="flex items-center gap-4">
+                                <Wallet  className="size-4 text-content2-day"/>
+                                <span className="text-base font-medium text-content2-day">Wallet</span>
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>

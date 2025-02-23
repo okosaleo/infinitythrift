@@ -1,73 +1,131 @@
 import { Chart } from "@/components/chart/chart";
-import { Banknote, CalendarCheck, CircleArrowOutUpRight, Clock, ClockArrowDown, HandCoins, MessageCircleIcon, MessageCircleQuestion, Users, UsersRound } from "lucide-react";
+import { prisma } from "@/lib/prisma";
+import { Banknote, CalendarCheck, CircleArrowOutUpRight, ClockArrowDown, HandCoins, MessageCircleQuestion, Users, UsersRound } from "lucide-react";
+
+
+// Data fetching functions
+const getTotalRevenue = async () => {
+  return await prisma.transaction.aggregate({
+    _sum: { amount: true },
+    where: { 
+      type: { in: ['DEPOSIT', 'LOAN_REPAYMENT'] },
+      status: 'COMPLETED'
+    }
+  });
+};
+
+const getTotalStructuredSavings = async () => {
+  return await prisma.structuredSavings.aggregate({
+    _sum: { currentAmount: true }
+  });
+};
+
+const getTotalThriftSavings = async () => {
+  return await prisma.thriftSavings.aggregate({
+    _sum: { currentAmount: true }
+  });
+};
+
+const getTotalLoans = async () => {
+  return await prisma.loan.aggregate({
+    _sum: { amount: true },
+    where: { status: 'ACTIVE' }
+  });
+};
+
+const getTotalMembers = async () => {
+  return await prisma.user.count();
+};
+
+const getLoanRequests = async () => {
+  return await prisma.loanRequest.count({
+    where: { status: 'PENDING_REVIEW' }
+  });
+};
+
+export default async function DashboardPage() {
+  const [
+    revenue,
+    structuredSavings,
+    thriftSavings,
+    loans,
+    members,
+    loanRequests
+  ] = await Promise.all([
+    getTotalRevenue(),
+    getTotalStructuredSavings(),
+    getTotalThriftSavings(),
+    getTotalLoans(),
+    getTotalMembers(),
+    getLoanRequests()
+  ]);
 
   const items = [
     {
       id: 1,
-      value: 0,
+      value: revenue._sum.amount?.toNumber() || 0,
       des: "TOTAL REVENUE",
       icon: CircleArrowOutUpRight
     },
     {
       id: 2,
-      value: 0,
+      value: structuredSavings._sum.currentAmount?.toNumber() || 0,
       des: "TOTAL STRUCTURED SAVINGS",
       icon: HandCoins
     },
     {
       id: 3,
-      value: 0,
+      value: thriftSavings._sum.currentAmount?.toNumber() || 0,
       des: "TOTAL THRIFT SAVINGS",
       icon: CalendarCheck
     },
     {
       id: 4,
-      value: 0,
+      value: loans._sum.amount?.toNumber() || 0,
       des: "TOTAL LOANS",
       icon: Banknote
     },
     {
       id: 5,
-      value: 0,
+      value: members,
       des: "TOTAL MEMBERS",
       icon: UsersRound
     },
     {
       id: 6,
-      value: 0,
+      value: loanRequests,
       des: "LOANS REQUESTS",
       icon: MessageCircleQuestion
     },
-  ]
+  ];
 
-
-export default function page() {
   return (
-    <div className="flex flex-col p-7  relative bg-[#f7f8f8]">
-       {/* OverView */}
-       <div className="w-full ">
-          <div className="mb-7">
-            <h1 className="text-xl font-semibold text-content2-day">Overview</h1>
-          </div>
-          {/* Cards */}
-          <div className="grid lg:grid-cols-3 grid-cols-1 md:gap-5 gap-3 ">
-       
-         {items.map((item) => (
-           <div key={item.id} className="bg-gradient-to-r from-hover-btn to-[#2e1905] lg:w-full w-full h-32 rounded-md flex justify-between p-5  items-center">
-            <div className="text-text-button flex flex-col gap-7">
-              <p>{item.value}</p>
-              <p>{item.des}</p>
-            </div>
-            <div>
-              <div className="h-14 w-14 bg-[#a79e9e6c] rounded-md flex items-center justify-center">
-                <item.icon className="size-4 text-text-button" />
+    <div className="flex flex-col p-7 relative bg-[#f7f8f8]">
+      {/* OverView */}
+      <div className="w-full">
+        <div className="mb-7">
+          <h1 className="text-xl font-semibold text-content2-day">Overview</h1>
+        </div>
+        
+        {/* Cards */}
+        <div className="grid lg:grid-cols-3 grid-cols-1 md:gap-5 gap-3">
+          {items.map((item) => (
+            <div key={item.id} className="bg-gradient-to-r from-hover-btn to-[#2e1905] lg:w-full w-full h-32 rounded-md flex justify-between p-5 items-center">
+              <div className="text-text-button flex flex-col gap-7">
+                <p>{item.value.toLocaleString()}</p>
+                <p>{item.des}</p>
+              </div>
+              <div>
+                <div className="h-14 w-14 bg-[#a79e9e6c] rounded-md flex items-center justify-center">
+                  <item.icon className="size-4 text-text-button" />
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-          </div>
-            {/* Charts */}
-            <div className="flex lg:flex-row flex-col w-full mt-5 gap-5  h-fit">
+          ))}
+        </div>
+
+              {/* Charts */}
+              <div className="flex lg:flex-row flex-col w-full mt-5 gap-5  h-fit">
               <div className="lg:w-3/5 w-full ">
                 <Chart />
               </div>
@@ -128,8 +186,8 @@ export default function page() {
         </div>
         <div></div>
       </div>
-            
-        </div>
+           
+      </div>
     </div>
   )
 }

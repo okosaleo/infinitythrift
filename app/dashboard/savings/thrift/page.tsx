@@ -1,11 +1,60 @@
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ArchiveRestore, Download,  EllipsisVerticalIcon, ListFilter, Plus, Search } from "lucide-react";
 import Thrift from "./Thrift";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+import { headers } from "next/headers";
+import { prisma } from "@/lib/prisma";
+import { ThriftSavingsTracker } from "@prisma/client";
+
+const getData = async (userId: string) => {
+  const data = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      thriftSavings: { 
+        select: 
+        { 
+        id: true,
+        currentAmount: true, 
+        category: true,
+        trackers: true,
+    } 
+    },
+    },
+  });
+  return data;
+};
 
 
-export default function ThriftPage() {
+
+export default async function ThriftPage() {
+     const session = await auth.api.getSession({ headers: await headers() });
+      if (!session) {
+        redirect("/sign-in");
+      }
+    
+      const userId = session.user.id;
+      const data = await getData(userId);
+
+      const calculateProgress = (trackers: ThriftSavingsTracker[]) => {
+        const totalDaysSaved = trackers.reduce((count, tracker) => {
+          return count + [
+            tracker.monday, 
+            tracker.tuesday, 
+            tracker.wednesday, 
+            tracker.thursday, 
+            tracker.friday, 
+            tracker.saturday, 
+            tracker.sunday
+          ].filter(Boolean).length; // Count only "true" days
+        }, 0);
+      
+        return (totalDaysSaved / 31) * 100; // Convert to percentage
+      };
+      
   return (
     <div className="flex flex-col gap-2">
         {/* Heading */}
@@ -18,21 +67,22 @@ export default function ThriftPage() {
             </div>
         </div>
          {/* Box */}
-         <div className="px-5 flex lg:flex-row flex-col justify-between">
-            <div className="flex lg:flex-row flex-col gap-4 w-full">
-            <div className="lg:w-2/5 w-full border-[1px] hover:border-content-day border-outline-day flex flex-col gap-1 rounded-md shadow-md mt-20 px-4 py-3">
+         <div className="px-5 flex lg:flex-row flex-col justify-between w-full">
+            <div className="flex lg:grid grid-cols-3 flex-col gap-4 w-full">
+                {data?.thriftSavings.map((item) => (
+            <div key={item.id} className="lg:w-full w-full border-[1px] hover:border-content-day border-outline-day flex flex-col gap-1 rounded-md shadow-md mt-20 px-4 py-3">
                 <div className="flex justify-between">
                     <p className="text-sm text-content-day ">Thrift Plan</p>
                     <EllipsisVerticalIcon className="size-7 text-content-day cursor-pointer" />
                 </div>
-                <div><p className="text-xl text-content-day font-bold">&#8358;0</p></div>
+                <div><p className="text-xl text-content-day font-bold">&#8358;{item.currentAmount.toString()}</p></div>
                 <div className="flex justify-between items-center">
                     <p className="text-sm text-content-day">My Interets</p>
-                    <p className="text-positive-day font-bold">&#8358;0</p>
+                    <p className="text-positive-day font-bold">&#8358;{item.currentAmount.toString()}</p>
                 </div>
                 <div className="flex justify-between items-center">
                     <p className="text-sm text-content-day">Progress</p>
-                    <p className="text-primary-day font-bold">0</p>
+                    <p className="text-primary-day font-bold">{calculateProgress(item.trackers).toFixed(2)}%</p>
                 </div>
                 <Dialog>
                 <div className="w-full flex gap-2">
@@ -42,19 +92,18 @@ export default function ThriftPage() {
                         <p className="text-[13px] text-text-button">Save Money</p>
                     </Button>
                     </DialogTrigger>
-                    <Button className="bg-text-button hover:bg-active-nav border-outline-day border-[1.3px] flex items-center flex-row gap-2 w-full">
+                    <Link href="/dashboard/wallet" className="bg-text-button hover:bg-active-nav border-outline-day border-[1.3px] flex items-center justify-center rounded-md flex-row gap-2 w-full">
                         <ArchiveRestore className="size-5 text-content-day" />
                         <p className="text-[13px] text-content-day">Withdraw</p>
-                    </Button>
+                    </Link>
                 </div>
                 <DialogContent className="border-primary-day">
-                    <DialogHeader className="flex items-center justify-center">
-                        <DialogTitle>Enter Savings Details</DialogTitle>
-                    </DialogHeader>
+                    
                     <Thrift />
                 </DialogContent>
                 </Dialog>
             </div>
+            ))}
             </div>
             <div className="flex justify-start items-start w-1/5 mt-10">
             </div>

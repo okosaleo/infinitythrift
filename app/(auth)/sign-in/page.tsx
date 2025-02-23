@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 
 export default function SignUp() {
@@ -42,7 +42,7 @@ export default function SignUp() {
 				},
 				onSuccess: () => {
 					setPending(false);
-					router.push("/dashboard");
+					redirect("/dashboard")
 				},
 				onError: (ctx) => {
 					console.log("error", ctx);

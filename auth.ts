@@ -4,6 +4,7 @@ import { prisma } from "./lib/prisma";
 import { sendEmail, sendVerificationEmail } from "./actions/email";
 import { openAPI } from "better-auth/plugins";
 import { admin } from "better-auth/plugins";
+import { nextCookies } from "better-auth/next-js";
 
 export const auth = betterAuth({
   rateLimit: {
@@ -21,7 +22,7 @@ export const auth = betterAuth({
       maxAge: 5 * 60 * 60 // Cache duration in seconds
   }
   },
-  plugins: [openAPI(), admin({
+  plugins: [openAPI(), nextCookies(), admin({
     impersonationSessionDuration: 60 * 60 * 24 * 7, // 7 days
   })],
   emailAndPassword: {

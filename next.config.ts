@@ -14,7 +14,13 @@ images: {
           hostname: "utfs.io",
           port: "",
           pathname: "/f/**"
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "bfqn9qc0iy.ufs.sh",
+        port: "",
+        pathname: "/f/**",
+      },
   ]
 }
 };
