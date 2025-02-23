@@ -139,7 +139,6 @@ export default function KYC() {
   };
 
   const onSubmit = async (data: KYCFormData) => {
-    setPending(true);
     try {
       // Merge extra state values not directly from the form inputs.
       const payload = {
@@ -175,8 +174,6 @@ export default function KYC() {
         title: "Submission Error",
         description: error.message || "An unexpected error occurred.",
       });
-    } finally {
-      setPending(false);
     }
   };
 
