@@ -9,10 +9,14 @@ import { useToast } from "@/hooks/use-toast";
 import { withdrawalSchema } from "@/lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InfoIcon } from "lucide-react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useState } from 'react';
 import { useForm } from "react-hook-form";
-import { PaystackConsumer } from 'react-paystack';
+const PaystackConsumer = dynamic(
+  () => import('react-paystack').then((mod) => mod.PaystackConsumer),
+  { ssr: false }
+);
 import { z } from "zod";
 
 type WithdrawalFormData = z.infer<typeof withdrawalSchema>;
@@ -147,13 +151,21 @@ const DepositPage = () => {
             </div>
           </div>
           <br />
-          <PaystackConsumer {...config} onSuccess={handleSuccess} onClose={handleClose}>
-            {({ initializePayment }) => (
-              <button className="w-full bg-primary-day text-text-button rounded-md p-2" onClick={() => initializePayment(handleSuccess, handleClose)}>
-                Deposit
-              </button>
-            )}
-          </PaystackConsumer>
+          {typeof window !== 'undefined' && (
+  <PaystackConsumer {...config} onSuccess={handleSuccess} onClose={handleClose}>
+    {({ initializePayment }) => (
+      <button 
+        className="w-full bg-primary-day text-text-button rounded-md p-2" 
+        onClick={() => initializePayment(
+          handleSuccess,
+          handleClose
+        )}
+      >
+        Deposit
+      </button>
+    )}
+    </PaystackConsumer>
+)}
         </DialogContent>
       </Dialog>
       
