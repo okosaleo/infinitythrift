@@ -1,6 +1,7 @@
 // app/api/withdrawal/route.ts
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
+import { Decimal } from '@prisma/client/runtime/library';
 import { headers } from 'next/headers';
 import { NextResponse, NextRequest } from 'next/server';
 
@@ -49,9 +50,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (wallet.balance < parseFloat(amount)) {
+    if (wallet.balance.lt(new Decimal(amount))) {
       return NextResponse.json(
-        { error: 'Insufficient funds' },
+        { error: "Insufficient funds" },
         { status: 400 }
       );
     }
@@ -88,10 +89,11 @@ export async function POST(req: NextRequest) {
         where: { userId: user.id },
         data: {
           balance: {
-            decrement: parseFloat(amount),
+            decrement: new Decimal(amount),
           },
         },
       });
+      
 
       return { withdrawalRequest, transaction };
     });
