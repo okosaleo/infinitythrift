@@ -5,7 +5,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { prisma } from "@/lib/prisma"
 import { ChevronRight, Plus, Settings } from "lucide-react"
 import Link from "next/link"
-import Create from "./components/creeate"
 
 const getThriftData = async () => {
   return await prisma.thriftSavings.groupBy({
@@ -76,7 +75,7 @@ export default async function Thriftpage() {
   <DialogHeader className="flex items-center justify-center">
     <DialogTitle>Create Thrift Contribution</DialogTitle>
   </DialogHeader>
-  <Create />
+  
 </DialogContent>
             </div>
             </Dialog>
