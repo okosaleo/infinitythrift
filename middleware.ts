@@ -2,7 +2,7 @@ import { betterFetch } from "@better-fetch/fetch";
 import { NextResponse, type NextRequest } from "next/server";
 import type { Session } from "@/auth";
 
-const publicRoutes = ["/", "/about", "/contact", "/faq", "/public/img", "/api/signup", "/services", "/api/uploadthing", "/admin/sign-in", "/forgot-password", "/reset-password", "/admin/forgot-password", "/admin/reset-password"];
+const publicRoutes = ["/", "/about", "/contact", "/faq", "/public/img", "/api/signup", "/services", "/email-verified", "/api/uploadthing", "/admin/sign-in", "/forgot-password", "/reset-password", "/admin/forgot-password", "/admin/reset-password"];
 const authRoutes = ["/sign-in", "/sign-up",];
 const passwordRoutes = ["/reset-password", "/forgot-password"];
 const adminRoutes = ["/admin", "/admin/dashboard"];
