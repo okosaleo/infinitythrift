@@ -10,10 +10,13 @@ export default function WalletBalance() {
   if (error) return <div className="text-text-button">Error</div>;
   if (!data) return <div className="text-text-button">...</div>;
 
+  // Additional check for wallet existence
+  if (!data.wallet) return <div className="text-text-button font-medium">₦0.00</div>;
+
   return (
-    <div className=" text-text-button">
-      <h2 className=" font-medium">
-       ₦{data.wallet.balance}
+    <div className="text-text-button">
+      <h2 className="font-medium">
+        ₦{data.wallet.balance}
       </h2>
     </div>
   );
