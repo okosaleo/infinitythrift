@@ -54,7 +54,7 @@ const loanBalance =
   return (
     <div className="flex flex-col w-full p-4 gap-12">
       {/* Verification */}
-      {!data?.kyc || data.kyc.kycstatus === "REJECTED" && (
+      {(!data?.kyc || data.kyc?.kycstatus === "REJECTED") && (
         <Dialog>
           <div className="flex items-center justify-center">
             <div className="border-[1px] border-[#db2222] rounded-sm lg:w-2/3 w-full h-12 flex justify-between items-center bg-[#fee9e8]">

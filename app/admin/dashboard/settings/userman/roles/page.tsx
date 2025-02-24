@@ -1,3 +1,4 @@
+
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Plus, Search } from "lucide-react";
 import Link from "next/link";
@@ -6,6 +7,7 @@ import Link from "next/link";
 export default function Rolespage() {
   return (
     <div className="flex flex-col ">
+       
          <div className="border-b-[1px] border-b-outline-day h-16 w-full flex items-center gap-2 px-4">
             <Link href="/admin/dashboard/settings/userman" ><ArrowLeft className="size-4 text-content-day" /></Link>
             <h1 className="text-2xl font-semi-bold text-content-day">User Management</h1>
@@ -25,13 +27,14 @@ export default function Rolespage() {
             <Input className="bg-[#8e95a252] border-0" />
             </div>
        </div> 
+      
        <div className="flex items-center justify-end p-3">
         <button className="text-[#ba9007] flex items-center gap-1 text-sm bg-[#8e95a252] py-1 px-3 rounded-xl">
             <Plus className="size-4 text-[#ba9007]" />
            <p className="text-[12px]">Create new User</p>
             </button>
-        </div>   
-    </div>
+        </div> 
+    </div>  
 </div>
   )
 }

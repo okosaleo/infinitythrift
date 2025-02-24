@@ -140,7 +140,7 @@ export default function Profilepage() {
                 </div>
                 <div className="flex flex-col gap-1 text-content-day">
                   <p className="text-content2-day">Email Address</p>
-                  <p>okosaleonel@gmail.com</p>
+                  <p>lentheblogger@gmail.com</p>
                 </div>
               </div> 
                 <div className="flex flex-col gap-1 text-content2-day mt-5">

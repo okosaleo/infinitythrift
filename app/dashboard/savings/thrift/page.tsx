@@ -69,41 +69,87 @@ export default async function ThriftPage() {
          {/* Box */}
          <div className="px-5 flex lg:flex-row flex-col justify-between w-full">
             <div className="flex lg:grid grid-cols-3 flex-col gap-4 w-full">
-                {data?.thriftSavings.map((item) => (
-            <div key={item.id} className="lg:w-full w-full border-[1px] hover:border-content-day border-outline-day flex flex-col gap-1 rounded-md shadow-md mt-20 px-4 py-3">
-                <div className="flex justify-between">
-                    <p className="text-sm text-content-day ">Thrift Plan</p>
-                    <EllipsisVerticalIcon className="size-7 text-content-day cursor-pointer" />
-                </div>
-                <div><p className="text-xl text-content-day font-bold">&#8358;{item.currentAmount.toString()}</p></div>
-                <div className="flex justify-between items-center">
-                    <p className="text-sm text-content-day">My Interets</p>
-                    <p className="text-positive-day font-bold">&#8358;{item.currentAmount.toString()}</p>
-                </div>
-                <div className="flex justify-between items-center">
-                    <p className="text-sm text-content-day">Progress</p>
-                    <p className="text-primary-day font-bold">{calculateProgress(item.trackers).toFixed(2)}%</p>
-                </div>
-                <Dialog>
-                <div className="w-full flex gap-2">
-                    <DialogTrigger className="w-full">
-                    <Button className="flex items-center flex-row gap-2 w-full">
-                        <Plus className="size-5 text-text-button" />
-                        <p className="text-[13px] text-text-button">Save Money</p>
-                    </Button>
-                    </DialogTrigger>
-                    <Link href="/dashboard/wallet" className="bg-text-button hover:bg-active-nav border-outline-day border-[1.3px] flex items-center justify-center rounded-md flex-row gap-2 w-full">
-                        <ArchiveRestore className="size-5 text-content-day" />
-                        <p className="text-[13px] text-content-day">Withdraw</p>
-                    </Link>
-                </div>
-                <DialogContent className="border-primary-day">
-                    
-                    <Thrift />
-                </DialogContent>
-                </Dialog>
-            </div>
-            ))}
+            {(!data?.thriftSavings || data.thriftSavings.length === 0) ? (
+  <div className="lg:w-full w-full border-[1px] hover:border-content-day border-outline-day flex flex-col gap-1 rounded-md shadow-md mt-20 px-4 py-3">
+    <div className="flex justify-between">
+      <p className="text-sm text-content-day">Thrift Plan</p>
+      <EllipsisVerticalIcon className="size-7 text-content-day cursor-pointer" />
+    </div>
+    <div>
+      <p className="text-xl text-content-day font-bold">&#8358; 0.00</p>
+    </div>
+    <Dialog>
+      <div className="w-full flex gap-2">
+        <DialogTrigger className="w-full">
+          <Button className="flex items-center flex-row gap-2 w-full">
+            <Plus className="size-5 text-text-button" />
+            <p className="text-[13px] text-text-button">Save Money</p>
+          </Button>
+        </DialogTrigger>
+        <Link
+          href="/dashboard/wallet"
+          className="bg-text-button hover:bg-active-nav border-outline-day border-[1.3px] flex items-center justify-center rounded-md flex-row gap-2 w-full"
+        >
+          <ArchiveRestore className="size-5 text-content-day" />
+          <p className="text-[13px] text-content-day">Withdraw</p>
+        </Link>
+      </div>
+      <DialogContent className="border-primary-day">
+        <Thrift />
+      </DialogContent>
+    </Dialog>
+  </div>
+) : (
+  data.thriftSavings.map((item) => (
+    <div
+      key={item.id}
+      className="lg:w-full w-full border-[1px] hover:border-content-day border-outline-day flex flex-col gap-1 rounded-md shadow-md mt-20 px-4 py-3"
+    >
+      <div className="flex justify-between">
+        <p className="text-sm text-content-day">Thrift Plan</p>
+        <EllipsisVerticalIcon className="size-7 text-content-day cursor-pointer" />
+      </div>
+      <div>
+        <p className="text-xl text-content-day font-bold">
+          &#8358;{item.currentAmount.toString()}
+        </p>
+      </div>
+      <div className="flex justify-between items-center">
+        <p className="text-sm text-content-day">My Interests</p>
+        <p className="text-positive-day font-bold">
+          &#8358;{item.currentAmount.toString()}
+        </p>
+      </div>
+      <div className="flex justify-between items-center">
+        <p className="text-sm text-content-day">Progress</p>
+        <p className="text-primary-day font-bold">
+          {calculateProgress(item.trackers).toFixed(2)}%
+        </p>
+      </div>
+      <Dialog>
+        <div className="w-full flex gap-2">
+          <DialogTrigger className="w-full">
+            <Button className="flex items-center flex-row gap-2 w-full">
+              <Plus className="size-5 text-text-button" />
+              <p className="text-[13px] text-text-button">Save Money</p>
+            </Button>
+          </DialogTrigger>
+          <Link
+            href="/dashboard/wallet"
+            className="bg-text-button hover:bg-active-nav border-outline-day border-[1.3px] flex items-center justify-center rounded-md flex-row gap-2 w-full"
+          >
+            <ArchiveRestore className="size-5 text-content-day" />
+            <p className="text-[13px] text-content-day">Withdraw</p>
+          </Link>
+        </div>
+        <DialogContent className="border-primary-day">
+          <Thrift />
+        </DialogContent>
+      </Dialog>
+    </div>
+  ))
+)}
+
             </div>
             <div className="flex justify-start items-start w-1/5 mt-10">
             </div>

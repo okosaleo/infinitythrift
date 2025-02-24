@@ -19,7 +19,7 @@ export const auth = betterAuth({
     updateAge: 60 * 60 * 12,
     cookieCache: {
       enabled: true,
-      maxAge: 5 * 60 * 60 // Cache duration in seconds
+      maxAge: 5 * 60  
   }
   },
   plugins: [openAPI(), nextCookies(), admin({
