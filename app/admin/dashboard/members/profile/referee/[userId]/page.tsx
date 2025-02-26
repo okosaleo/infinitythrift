@@ -1,8 +1,5 @@
-
-import { auth } from '@/auth';
+// components/RefereeList.tsx
 import { prisma } from '@/lib/prisma';
-import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
 
 const getData = async (userId: string) => {
 const data = await prisma.referral.findMany({
@@ -17,16 +14,11 @@ const data = await prisma.referral.findMany({
   return data
 }
 
-export default async function RefereeList() {
+export default async function RefereeList({params}: { params: Promise<{ userId: string }>}) {
   // Fetch all referrals where the current user is the referrer
-  const session = await auth.api.getSession({
-      headers: await headers()
-    })
-    
-    if(!session || session == null) {
-      redirect("/sign-in");
-    }
-    const data = await getData(session?.user.id);
+  const { userId } = await params;
+    const data = await getData(userId);
+
   return (
     <div className="p-4">
       <h2 className="text-lg font-bold mb-2">User Referees</h2>

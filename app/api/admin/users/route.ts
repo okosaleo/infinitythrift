@@ -2,12 +2,23 @@ import { NextResponse, NextRequest } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { createUserSchema } from '@/lib/schemas';
 import { prisma } from '@/lib/prisma';
+import { auth } from '@/auth';
+import { headers } from 'next/headers';
 
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const validation = createUserSchema.safeParse(body);
+     const session = await auth.api.getSession({ headers: await headers() });
+            if (!session) {
+              throw new Error("Unauthorized");
+            }
+            const adminUser = session.user;
+
+            if (adminUser.role !== 'admin') {
+              return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+            }
 
     if (!validation.success) {
       return NextResponse.json(
@@ -39,6 +50,7 @@ export async function POST(req: NextRequest) {
         name,
         email,
         role,
+        emailVerified: true, // Add this line to set email verification
         accounts: {
           create: {
             providerId: 'credentials',
@@ -51,7 +63,6 @@ export async function POST(req: NextRequest) {
         accounts: true,
       },
     });
-
     return NextResponse.json(
       { message: 'User created successfully', user },
       { status: 201 }

@@ -8,3 +8,11 @@ export const createUserSchema = z.object({
 });
 
 export type CreateUserFormData = z.infer<typeof createUserSchema>;
+
+
+export const categorySavingsSchema = z.object({
+  amount: z.number().positive({ message: "Amount must be positive" }),
+  description: z.string().max(500).optional(),
+});
+
+export type CategorySavingsFormData = z.infer<typeof categorySavingsSchema>;

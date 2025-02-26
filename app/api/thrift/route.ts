@@ -38,9 +38,15 @@ async function getUserFromRequest(req: NextRequest) {
   });
 }
 
+// Helper function to get the current day field name in lowercase.
+function getCurrentDayField() {
+  const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  return days[new Date().getDay()];
+}
+
 export async function POST(req: NextRequest) {
   try {
-    // Parse and validate the request body
+    // Parse and validate the request body.
     const body = await req.json();
     const parsed = thriftSchema.safeParse(body);
     if (!parsed.success) {
@@ -72,6 +78,9 @@ export async function POST(req: NextRequest) {
     // Convert the category value to the proper enum format (e.g., "BRONZE")
     const thriftEnumCategory = category.toUpperCase() as ThriftCategory;
 
+    const startDate = new Date();
+const endDate = new Date(startDate);
+endDate.setDate(startDate.getDate() + 31);
     // Create the thrift savings record.
     const thrift = await prisma.thriftSavings.create({
       data: {
@@ -82,19 +91,21 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Create an initial tracker record for the thrift savings plan.
-    // Here we set `weekStart` to the current date.
+    // Get the current day field (e.g., "monday", "tuesday", etc.)
+    const currentDay = getCurrentDayField();
+
+    // Create an initial tracker record and mark the current day as positive.
     await prisma.thriftSavingsTracker.create({
       data: {
         thriftSavingsId: thrift.id,
         weekStart: new Date(),
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false,
-        sunday: false,
+        monday: currentDay === "monday",
+        tuesday: currentDay === "tuesday",
+        wednesday: currentDay === "wednesday",
+        thursday: currentDay === "thursday",
+        friday: currentDay === "friday",
+        saturday: currentDay === "saturday",
+        sunday: currentDay === "sunday",
       },
     });
 
@@ -114,7 +125,12 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(
-      { message: "Thrift savings plan started successfully", thriftId: thrift.id },
+      { 
+        message: "Thrift savings plan started successfully", 
+        thriftId: thrift.id,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString()
+      },
       { status: 200 }
     );
   } catch (error) {
@@ -122,3 +138,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
+

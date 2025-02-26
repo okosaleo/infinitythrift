@@ -2,9 +2,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { ArrowLeft, ChevronRight, Plus } from "lucide-react";
 import Link from "next/link";
 import CreateUser from "./components/Create-User";
+import { prisma } from "@/lib/prisma";
 
 
-export default function UserPage() {
+export default async function UserPage() {
+  const adminCount = await prisma.user.count({
+    where: { role: 'admin' },
+  });
   return (
     <div className="flex flex-col">
       <Dialog>
@@ -33,8 +37,9 @@ export default function UserPage() {
     </div>
     <Link href='/admin/dashboard/settings/userman/roles' className=" flex justify-between items-center p-3 border-b-[1px] border-outline-day">
       <div className="flex flex-col gap-2">
-        <h2 className="text-lg font-medium">Admin(0)</h2>
-        <p className="text-[#8E95A2] text-sm">No User</p>
+        <h2 className="text-lg font-medium">Admin({adminCount})</h2>
+        <p className="text-[#8E95A2] text-sm">{adminCount === 0 ? 'No User' : `${adminCount} Admin${adminCount > 1 ? 's' : ''}`}
+        </p>
       </div>
       <div>
         <ChevronRight className="text-icon-day" />

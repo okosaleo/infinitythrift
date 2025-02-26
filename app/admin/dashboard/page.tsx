@@ -1,6 +1,8 @@
 import { Chart } from "@/components/chart/chart";
 import { prisma } from "@/lib/prisma";
 import { Banknote, CalendarCheck, CircleArrowOutUpRight, ClockArrowDown, HandCoins, MessageCircleQuestion, Users, UsersRound } from "lucide-react";
+import ActivitiesAdmin from "./components/Activities";
+import MembersRanking from "./components/Ranking";
 
 
 // Data fetching functions
@@ -15,8 +17,8 @@ const getTotalRevenue = async () => {
 };
 
 const getTotalStructuredSavings = async () => {
-  return await prisma.structuredSavings.aggregate({
-    _sum: { currentAmount: true }
+  return await prisma.categorySavings.aggregate({
+    _sum: { amount: true }
   });
 };
 
@@ -69,7 +71,7 @@ export default async function DashboardPage() {
     },
     {
       id: 2,
-      value: structuredSavings._sum.currentAmount?.toNumber() || 0,
+      value: structuredSavings._sum.amount?.toNumber() || 0,
       des: "TOTAL STRUCTURED SAVINGS",
       icon: HandCoins
     },
@@ -154,38 +156,10 @@ export default async function DashboardPage() {
             </div>
 
             {/* Activities*/}
-            <div className="flex flex-col ml-3 w-full bg-text-button mt-10 rounded-md">
-        <div className="flex flex-col w-full">
-          <div className="flex justify-between w-full p-5">
-            <h2 className="text-xl text-content-day font-bold">Activities</h2>
-            <button className="p-2 bg-light-overlay rounded-2xl">See All</button>
-          </div>
-          <div className="w-full items-center justify-center h-[50vh]">
-            <div className="justify-center items-center mt-24 flex flex-col gap-3">
-              <ClockArrowDown className="size-6" />
-              <p>All activities by members — savings, loan repayment will appear here.</p>
-            </div>
-          </div>
-        </div>
-        <div></div>
-      </div>
+          <ActivitiesAdmin />
 
           {/* Members Ranking*/}
-          <div className="flex flex-col ml-3 w-full bg-text-button mt-4 rounded-md">
-        <div className="flex flex-col w-full">
-          <div className="flex justify-between w-full p-5">
-            <h2 className="text-xl text-content-day font-bold">Members Ranking</h2>
-            <button className="p-2 bg-light-overlay rounded-2xl">See All</button>
-          </div>
-          <div className="w-full items-center justify-center h-[50vh]">
-            <div className="justify-center items-center mt-24 flex flex-col gap-3">
-              <Users className="size-6 text-primary-day" />
-              <p>Members with the most savings will appear here.All activities by members — savings, loan repayment will appear here.</p>
-            </div>
-          </div>
-        </div>
-        <div></div>
-      </div>
+         <MembersRanking />
            
       </div>
     </div>

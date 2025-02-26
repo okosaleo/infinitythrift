@@ -4,11 +4,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { useToast } from '@/hooks/use-toast'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import React, { useState } from 'react'
 
 export default function Thrift() {
+  const { toast } = useToast()
   const [showSummary, setShowSummary] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState('')
   const [dailyAmount, setDailyAmount] = useState('')
@@ -43,11 +45,10 @@ export default function Thrift() {
       }
 
       // On success, log the plan details and reset the form.
-      console.log({
-        category: selectedCategory,
-        dailyAmount: amount,
-        description
-      })
+    toast({
+      title: "You started a thrift savings plan",
+      description: "Congrats you just started a thrift savings plan"
+    })
       setShowSummary(false)
       setSelectedCategory('')
       setDailyAmount('')
@@ -118,7 +119,7 @@ export default function Thrift() {
             />
           </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && <p className="text-destructive text-sm">{error}</p>}
 
           <Button className='mt-4 w-full' onClick={handleProceed}>
             Proceed To Summary
@@ -167,7 +168,7 @@ export default function Thrift() {
             </div>
           </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && <p className="text-destructive text-sm">Check your input and price range</p>}
 
           <div className='flex gap-3'>
             <Button 

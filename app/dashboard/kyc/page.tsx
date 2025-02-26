@@ -28,6 +28,7 @@ interface KYCFormData {
   occupation: string;
   employer: string;
   monthlyIncomeEstimate: string;
+  phoneNumber: string;
   bvn: string;
   issuedIdType: string;
   idUpload: string;
@@ -108,6 +109,7 @@ export default function KYC() {
       bvn: "",
       issuedIdType: "",
       idUpload: "",
+      phoneNumber: "",
       selfieWithId: "",
       identificationNumber: "",
       idSelfie: "",
@@ -391,6 +393,16 @@ export default function KYC() {
               {errors.monthlyIncomeEstimate && <p className="text-destructive text-[10px]">{errors.monthlyIncomeEstimate.message}</p>}
             </div>
             <div>
+              <Label>Phone Number</Label>
+              <Controller
+                control={control}
+                name="phoneNumber"
+                rules={{ required: "Phone Number is required" }}
+                render={({ field }) => <Input placeholder="Enter phone Number" {...field} />}
+              />
+              {errors.phoneNumber && <p className="text-destructive text-[10px]">{errors.phoneNumber.message}</p>}
+            </div>
+            <div>
               <Label>Bank Verification Number (BVN)</Label>
               <Controller
                 control={control}
@@ -570,7 +582,7 @@ export default function KYC() {
                 render={({ field }) => <Input placeholder="Enter Full Name" {...field} />}
               />
               {errors.signature && <p className="text-destructive text-[10px]">{errors.signature.message}</p>}
-              <p className="text-[12px]">Write your full government name in all caps</p>
+              <p className="text-[12px]">Write your full government name in all caps or Capital Letters</p>
             </div>
             { isSubmitting ? (
             <Button className="w-full mt-4 flex gap-2">
@@ -579,7 +591,7 @@ export default function KYC() {
             </Button>
           ) :
           <Button type="submit" className="w-full mt-4">
-            Fund Wallet
+            Submit
           </Button>}
           </div>
         </div>

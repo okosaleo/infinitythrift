@@ -35,6 +35,7 @@ export const kycSchema = z.object({
   occupation: z.string().min(1, { message: "Occupation is required" }),
   employer: z.string().min(1, { message: "Employer is required" }),
   monthlyIncomeEstimate: z.string().min(1, { message: "Monthly income estimate is required" }),
+  phoneNumber: z.string().min(9, {message: "Phone Number is Required"} ),
   bvn: z.string().min(1, { message: "BVN is required" }),
 
   // Step 3

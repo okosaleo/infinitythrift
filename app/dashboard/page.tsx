@@ -18,7 +18,7 @@ const getData = async (userId: string) => {
       kyc: true,
       wallet: { select: { balance: true } },
       thriftSavings: { select: { currentAmount: true } },
-      structuredSavings: { select: { currentAmount: true } },
+      categorySavings: { select: { amount: true } },
       loans: { select: { amountDue: true, amountPaid: true } },
       transactions: true,
     },
@@ -42,7 +42,7 @@ export default async function DashBoardPage() {
   data?.thriftSavings?.reduce((acc, item) => acc + (item.currentAmount?.toNumber?.() || 0), 0) || 0;
 
 const structuredSavingsBalance =
-  data?.structuredSavings?.reduce((acc, item) => acc + (item.currentAmount?.toNumber?.() || 0), 0) || 0;
+  data?.categorySavings?.reduce((acc, item) => acc + (item.amount?.toNumber?.() || 0), 0) || 0;
 
 const loanBalance =
   data?.loans?.reduce((acc, loan) => acc + ((loan.amountDue?.toNumber?.() || 0) - (loan.amountPaid?.toNumber?.() || 0)), 0) || 0;
@@ -98,8 +98,14 @@ const loanBalance =
             <div className="flex justify-between">
               <div className="flex flex-col gap-1">
                 <p className="text-text-button text-[13px]">PERSONAL WALLET</p>
-                {/* Display the wallet balance dynamically */}
-                <WalletBalance />
+                <div>
+                {!data?.wallet ? (
+                  <p className="text-text-button font-medium">{formatCurrency(0.00)}</p>
+                )
+                : 
+                <p className="text-text-button font-medium">  ₦{data?.wallet?.balance.toString()}</p>
+                }
+                </div>
               </div>
               <div className="h-10 w-10 rounded-md bg-[#efefef3b] flex items-center justify-center">
                 <Wallet className="size-5 text-text-button" />

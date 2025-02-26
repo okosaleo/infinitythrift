@@ -1,10 +1,17 @@
 
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Plus, Search } from "lucide-react";
 import Link from "next/link";
+import CreateUser from "../components/Create-User";
+import { prisma } from "@/lib/prisma";
 
 
-export default function Rolespage() {
+export default async function Rolespage() {
+  const adminUsers = await prisma.user.findMany({
+    where: { role: 'admin' },
+    select: { id: true, name: true, email: true },
+  });
   return (
     <div className="flex flex-col ">
        
@@ -29,11 +36,39 @@ export default function Rolespage() {
        </div> 
       
        <div className="flex items-center justify-end p-3">
+        <Dialog>
+          <DialogTrigger>
         <button className="text-[#ba9007] flex items-center gap-1 text-sm bg-[#8e95a252] py-1 px-3 rounded-xl">
             <Plus className="size-4 text-[#ba9007]" />
            <p className="text-[12px]">Create new User</p>
             </button>
+            </DialogTrigger>
+            <DialogContent>
+            <DialogHeader className="flex items-center justify-center">
+            <DialogTitle>Create User</DialogTitle>
+          </DialogHeader>
+          <CreateUser />
+            </DialogContent>
+        </Dialog>
         </div> 
+
+        {/* List all admin users*/}
+        <div className="px-3 mt-4">
+          {adminUsers.length > 0 ? (
+            <ul>
+              {adminUsers.map((admin) => (
+                <li key={admin.id}>
+                  <Link href={`/admin/dashboard/settings/${admin.id}`}  className="p-2 border-b border-outline-day">
+                  <div className="font-medium">{admin.name}</div>
+                  <div className="text-sm text-[#8E95A2]">{admin.email}</div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-[#8E95A2]">No admin users available.</p>
+          )}
+        </div>
     </div>  
 </div>
   )

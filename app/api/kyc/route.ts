@@ -53,6 +53,7 @@ export async function POST(req: NextRequest) {
       state: data.state,
       city: data.city,
       proofOfAddress: data.proofOfAddressFile,
+      phoneNumber: data.phoneNumber,
       occupation: data.occupation,
       employer: data.employer,
       monthlyIncome: monthlyIncome,

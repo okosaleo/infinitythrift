@@ -1,7 +1,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { ArchiveRestore, Download,  EllipsisVerticalIcon, ListFilter, Plus, Search } from "lucide-react";
+import { ArchiveRestore,  EllipsisVerticalIcon, Plus,  } from "lucide-react";
+
 import Thrift from "./Thrift";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -9,21 +10,27 @@ import { auth } from "@/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { ThriftSavingsTracker } from "@prisma/client";
+import ThriftTransactions from "./components/Transactions";
+import TransferFunds from "../../wallet/component/Transfer";
 
 const getData = async (userId: string) => {
   const data = await prisma.user.findUnique({
     where: { id: userId },
     include: {
       thriftSavings: { 
-        select: 
-        { 
-        id: true,
-        currentAmount: true, 
-        category: true,
-        trackers: true,
-    } 
-    },
-    },
+        include: {  
+          trackers: true
+        }
+      },
+      wallet:{
+        select: {balance: true}
+      },
+      transactions: {
+        where: {
+          destinationType: "THRIFT_SAVINGS"
+        }
+      }
+    }
   });
   return data;
 };
@@ -154,21 +161,13 @@ export default async function ThriftPage() {
             <div className="flex justify-start items-start w-1/5 mt-10">
             </div>
          </div>
-         {/* Transsactions */}
-         <div className="flex flex-col gap-2 mt-5">
-            <div className="flex justify-end w-full">
-                <div className="flex gap-3 flex-row p-2 items-center">
-                    <Search className="size-6 text-icon-day" />
-                    <ListFilter className="size-6 text-content-day" />
-                    <Button>
-                        <Download />
-                        <p>Download</p>
-                    </Button>
-                </div>
-            </div>
-            {/* main*/}
-            <div></div>
+         <div className="w-full p-4">
+         <TransferFunds userId={data?.id} walletBalance={data?.wallet?.balance.toNumber()} thriftPlans={data?.thriftSavings} />
          </div>
+         {/* Transactions */}
+         <ThriftTransactions  thriftSavings={data?.thriftSavings || []}
+          transactions={data?.transactions || []}
+          />
     </div>
   )
 }

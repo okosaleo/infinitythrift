@@ -115,10 +115,10 @@ export default function Members() {
             <Upload className='size-6 text-icon-day' />
             <Search className='size-6 text-icon-day' />
             <ListFilter className='size-6 text-icon-day' />
-            <button className='p-2 flex items-center bg-primary-active gap-2 rounded-md'>
+            <Link href="/admin/dashboard/settings/userman" className='p-2 flex items-center bg-primary-active gap-2 rounded-md'>
               <Plus className='size-4 text-text-button' />
               <p className='text-sm text-text-button'>Create New Member</p>
-            </button>
+            </Link>
           </div>
        </div>
 
@@ -179,21 +179,21 @@ export default function Members() {
                      <TableCell>{item.name}</TableCell>
                      <TableCell>₦{(item.wallet?.balance || 0).toLocaleString('en-NG')}</TableCell>
                      <TableCell className="text-right">
-                       ₦{item.thriftSavings
-                         .reduce((sum, s) => sum + s.currentAmount, 0)
-                         .toLocaleString('en-NG')}
-                     </TableCell>
-                     <TableCell className="text-right">
-                       ₦{item.structuredSavings
-                         .reduce((sum, s) => sum + s.currentAmount, 0)
-                         .toLocaleString('en-NG')}
-                     </TableCell>
-                     <TableCell className="text-right">
-                       ₦{item.loans
-                         .filter(loan => ['APPROVED', 'ACTIVE', 'PAID', 'DEFAULTED'].includes(loan.status))
-                         .reduce((sum, loan) => sum + loan.amount, 0)
-                         .toLocaleString('en-NG')}
-                     </TableCell>
+              ₦{item.thriftSavings
+                .reduce((sum, s) => sum + Number(s.currentAmount), 0)
+                .toLocaleString('en-NG')}
+            </TableCell>
+            <TableCell className="text-right">
+              ₦{item.structuredSavings
+                .reduce((sum, s) => sum + Number(s.currentAmount), 0)
+                .toLocaleString('en-NG')}
+            </TableCell>
+            <TableCell className="text-right">
+              ₦{item.loans
+                .filter(loan => ['APPROVED', 'ACTIVE', 'PAID', 'DEFAULTED'].includes(loan.status))
+                .reduce((sum, loan) => sum + Number(loan.amount), 0)
+                .toLocaleString('en-NG')}
+            </TableCell>
                      <TableCell className='flex flex-row gap-3 items-center justify-end'>
                        {new Date(item.createdAt).toLocaleDateString('en-GB')}
                        <DropdownMenu>

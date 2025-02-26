@@ -112,16 +112,26 @@ model ThriftSavingsTracker {
 
 
 
+enum ActiveStatus {
+  ACTIVE
+  COMPLETED
+}
+
 model ThriftSavings {
-  id           String         @id @default(cuid())
+  id           String               @id @default(cuid())
   userId       String
-  user         User           @relation(fields: [userId], references: [id])
+  user         User                 @relation(fields: [userId], references: [id])
   dailyAmount  Decimal 
   category     ThriftCategory
-  currentAmount Decimal        @default(0.0)
-  trackers      ThriftSavingsTracker[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  currentAmount Decimal              @default(0.0)
+  status       ActiveStatus         @default(ACTIVE)
+  trackers     ThriftSavingsTracker[]
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  endDate      DateTime?            // Add end date for completion tracking
+
+  @@index([status])
+  @@index([endDate])
 }
 
 model CategorySavings {
